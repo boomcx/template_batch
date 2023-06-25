@@ -2,8 +2,7 @@ export 'params.dart';
 
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
-import 'package:template_getx/models.dart';
-
+import './models.dart';
 import 'params.dart';
 
 part 'api_client.g.dart';
@@ -15,7 +14,7 @@ abstract class ApiClient {
 
   /// 退出登录
   @DELETE('/user/logout')
-  Future<void> logout(); 
+  Future<void> logout();
 
   @POST('/action/openapi/token')
   Future<void> token(@Body() TokenParams params);

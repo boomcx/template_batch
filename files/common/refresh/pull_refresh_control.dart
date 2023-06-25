@@ -4,8 +4,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../widgets/empty_data_view.dart';
-import 'paging_mixin.dart';
-import 'refresh_header.dart';
+import 'paging_mixin.txt';
+import 'refresh_header.txt';
 
 /// 刷新配置
 class PullRefreshControl extends StatelessWidget {

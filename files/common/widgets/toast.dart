@@ -4,7 +4,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 
 import '../../support_files/theme.dart';
-import 'app_progress_indicator.dart';
+import 'app_progress_indicator.txt';
 
 class Toast {
   static NavigatorObserver toastNavigatorObserver() =>

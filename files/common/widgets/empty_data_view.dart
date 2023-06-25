@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_progress_indicator.dart';
+import 'app_progress_indicator.txt';
 
 class DefaultEmptyDataView extends StatelessWidget {
   const DefaultEmptyDataView({

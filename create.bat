@@ -31,7 +31,7 @@ set projectPath=%cd%\%projectName%
 echo [INFO] Project path is: %projectPath%
 
 call :print "Start creating new flutter plugin project..."
-echo flutter create --platforms=ios,android --org %projectOrg%  --pub %projectName%>temp.bat
+echo flutter create --platforms=ios,android --org %projectOrg% --pub %projectName%>temp.bat
 call temp.bat
 if errorlevel 1 (
 	echo [INFO] Your flutter version is too low please update.
@@ -39,12 +39,12 @@ if errorlevel 1 (
 	call temp.bat
 )
 del temp.bat
-call :print "Apply default configuration..."
 call :createFolders %projectPath%
-rem Add dependency
-call :addFlutterDependency %projectPath%
-call :addEBGRepository %projectPath%\android
-call :addEBGRepository %projectPath%\example\android
+@REM call :createFiles %projectPath%
+@REM call :addFlutterDependency %projectPath%
+@REM call :addEBGRepository %projectPath%\android
+@REM call :addEBGRepository %projectPath%\example\android
+@REM call :flutterCLI %projectPath%
 pause
 goto :eof
 
@@ -81,22 +81,42 @@ if not exist %1 (
 cd /d %1
 goto :eof
 
+@REM 复制lib下的公共文件
 :createFolders
+call :print "Generate configuration files."
 setlocal enabledelayedexpansion
-for %%i in (support_files services network models common) do (
-    set "source_folder=%scriptPath%\%%i"
-    set "destination_folder=%projectPath%\lib\%%i"
 
-    xcopy "!source_folder!" "!destination_folder!" /E /I
+for %%i in (support_files services network models common) do (
+	setlocal enabledelayedexpansion
+
+    set "source_folder=%scriptPath%\files\%%i"
+    set "destination_folder=%1\lib\%%i"
+
+    xcopy "!source_folder!" "!destination_folder!" /S /I /Y >nul
+
+)
+endlocal
+
+@REM call :createFiles
+
+goto :eof
+ 
+
+@REM 创建main.dart的同级配置文件
+:createFiles
+setlocal enabledelayedexpansion
+for %%i in (app main models service tabbar) do (
+    set "source_file=files\%%i.txt"
+    set "destination_file=%1\lib\%%i.dart"
+
+	( type "!source_file!" ) > "!destination_file!"
+	
 )
 
-echo Folder has been copied!
+endlocal
 goto :eof
 
-:appendFileContent
-for /f "delims=" %%i in (%1) do if "%%i"=="" (echo.>>%2) else (echo %%i>>%2)
-goto :eof
-
+@REM 添加设置依赖
 :addFlutterDependency
 set pubspec=%1\pubspec.yaml
 setlocal enabledelayedexpansion
@@ -106,14 +126,20 @@ for /f "eol== delims=" %%a in (%pubspec%) do (
     set "line=%%a"
     setlocal enabledelayedexpansion
 
+	REM 将当前行写入临时文件
+	echo !line!>> %pubspec%.tmp
+
     REM 查找 cupertino_icons 行
 	echo !line! | findstr /i /c:"cupertino_icons:" >nul
 	if !errorlevel! equ 0 (
 		REM 在 cupertino_icons 行之后插入新的依赖项
 		@REM echo !line!>> %pubspec%.tmp
+		echo   flutter_localizations:>> %pubspec%.tmp
+		echo     sdk: flutter>> %pubspec%.tmp
 		echo   get: ^^5.0.0-release-candidate-4>> %pubspec%.tmp
 		echo   json_annotation: ^^4.8.1>> %pubspec%.tmp
 		echo   freezed_annotation: ^^2.2.0>> %pubspec%.tmp
+		echo   flutter_hooks: ^^0.18.6>> %pubspec%.tmp
 		echo   hive_flutter: ^^1.1.0>> %pubspec%.tmp
 		echo   bot_toast: ^^4.0.3>> %pubspec%.tmp
 		echo   easy_refresh: ^^3.0.5>> %pubspec%.tmp
@@ -124,6 +150,7 @@ for /f "eol== delims=" %%a in (%pubspec%) do (
 		echo   cached_network_image: ^^3.2.2>> %pubspec%.tmp
 		echo   event_bus: ^^2.0.0>> %pubspec%.tmp
 		echo   logger: ^^1.2.2>> %pubspec%.tmp
+		echo   star_menu: ^^3.1.4>> %pubspec%.tmp
 		echo   # 启动图: flutter pub run flutter_native_splash:create>> %pubspec%.tmp
 		echo   # flutter_native_splash: ^^2.3.0>> %pubspec%.tmp
 	) 
@@ -141,9 +168,8 @@ for /f "eol== delims=" %%a in (%pubspec%) do (
 		echo   # 一键生成启动图标: flutter pub run flutter_launcher_icons>> %pubspec%.tmp 
 		echo   # flutter_launcher_icons: ^^0.13.1>> %pubspec%.tmp 
 	) 
-
-	REM 将当前行写入临时文件
-	echo !line!>> %pubspec%.tmp
+	
+	endlocal
 
 )
 
@@ -203,4 +229,42 @@ certutil -decode .logo .outlogo>nul
 del .logo
 )
 type .outlogo
+goto :eof
+
+
+:flutterCLI
+call :print "Run flutter CLI..."
+
+REM 进入指定文件夹
+cd /d "%1"
+
+REM 运行命令
+get create page:home
+
+REM 返回到原始目录
+cd /d "%~dp0"
+exit /b
+goto :eof
+
+:runCommands
+REM 运行多个 Flutter 命令
+call :runGetCreatePage
+call :runBuildRunner
+exit /b
+goto :eof
+
+
+:runPubGet
+flutter pub get
+exit /b
+goto :eof
+
+:runGetCreatePage
+get create page:home
+exit /b
+goto :eof
+
+:runBuildRunner
+flutter pub run build_runner build
+exit /b
 goto :eof

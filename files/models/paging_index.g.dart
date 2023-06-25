@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'paging_index.dart';
+part of 'paging_index.txt';
 
 // **************************************************************************
 // JsonSerializableGenerator

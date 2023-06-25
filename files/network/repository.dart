@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:template_getx/app.dart';
+import 'app.dart';
 
-import 'api_client.dart';
-import 'interceptor.dart';
+import 'api_client.txt';
+import 'interceptor.txt';
 
 /// 统一处理错误信息
 void formatError(e) {

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 
-import '../services/user.dart';
+import '../services/user.txt';
 
 /// 请求拦截相关的处理
 class NetInterceptor extends Interceptor {
