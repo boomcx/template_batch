@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import '../network/repository.txt';
+import '../network/repository.dart';
 import '../models.dart';
 
 const _kAppToken = 'k_app_token';

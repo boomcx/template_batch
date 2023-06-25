@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
-import 'package:template_getx/app.dart';
+import '/support_files/theme.dart';
+import 'package:flutter/cupertino.dart'; 
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({

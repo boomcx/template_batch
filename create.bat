@@ -40,11 +40,10 @@ if errorlevel 1 (
 )
 del temp.bat
 call :createFolders %projectPath%
-@REM call :createFiles %projectPath%
-@REM call :addFlutterDependency %projectPath%
+call :addFlutterDependency %projectPath%
 @REM call :addEBGRepository %projectPath%\android
 @REM call :addEBGRepository %projectPath%\example\android
-@REM call :flutterCLI %projectPath%
+call :flutterCLI %projectPath%
 pause
 goto :eof
 
@@ -58,18 +57,10 @@ echo !--------------------------------------------------------------------------
 goto :eof
 
 :print
-echo ===================================================================================
 echo.
 set msg=%1
 echo %msg:"=%
 echo.
-echo ===================================================================================
-goto :eof
-
-:judgeInstall
-set JUDGE_INSTALL_RET=
-for /f "tokens=1" %%i in ('%1 --version^|findstr /c:"%1"') do set JUDGE_INSTALL_RET=%%i
-if /i "%1"=="%JUDGE_INSTALL_RET%" (set %2=0) else (set %2=-1)
 goto :eof
 
 :changeDir
@@ -83,43 +74,46 @@ goto :eof
 
 @REM 复制lib下的公共文件
 :createFolders
-call :print "Generate configuration files."
-setlocal enabledelayedexpansion
+call :print "Generate configuration files..."
 
-for %%i in (support_files services network models common) do (
+@REM for %%i in (app support_files services network models common) do (
+
+@REM     set "source_folder=%scriptPath%\files\%%i"
+@REM     set "destination_folder=%1\lib\%%i"
+	
+@REM 	setlocal enabledelayedexpansion
+
+@REM     xcopy "!source_folder!" "!destination_folder!" /S /I /Y /V >nul
+	
+@REM 	endlocal
+
+@REM )
+  
+xcopy "%scriptPath%\files" "%1\lib\" /E /I /Y
+
+set "source_folder=%scriptPath%\assets"
+xcopy "%source_folder%" "%projectPath%\assets" /S /I /Y /V >nul
+
+for %%i in (app main models service tabbar) do (
+
+    set "source_file=%scriptPath%\files\%%i.dart"
+    set "destination_file=%1\lib\%%i.dart"
+
 	setlocal enabledelayedexpansion
 
-    set "source_folder=%scriptPath%\files\%%i"
-    set "destination_folder=%1\lib\%%i"
+	( type "!source_file!" ) > "!destination_file!" 
 
-    xcopy "!source_folder!" "!destination_folder!" /S /I /Y >nul
-
+	endlocal
 )
-endlocal
-
-@REM call :createFiles
 
 goto :eof
  
 
-@REM 创建main.dart的同级配置文件
-:createFiles
-setlocal enabledelayedexpansion
-for %%i in (app main models service tabbar) do (
-    set "source_file=files\%%i.txt"
-    set "destination_file=%1\lib\%%i.dart"
-
-	( type "!source_file!" ) > "!destination_file!"
-	
-)
-
-endlocal
-goto :eof
-
 @REM 添加设置依赖
 :addFlutterDependency
+call :print "Insert dependency..."
+
 set pubspec=%1\pubspec.yaml
-setlocal enabledelayedexpansion
 
 REM 读取 pubspec.yaml 文件内容
 for /f "eol== delims=" %%a in (%pubspec%) do (
@@ -169,8 +163,15 @@ for /f "eol== delims=" %%a in (%pubspec%) do (
 		echo   # flutter_launcher_icons: ^^0.13.1>> %pubspec%.tmp 
 	) 
 	
-	endlocal
+	REM 查找 assets 行
+	echo !line! | findstr /i /c:"uses-material-design:" >nul
+	if !errorlevel! equ 0 (
+		REM 在 uses-material-design 行之后插入新的依赖项
+		echo   assets:>> %pubspec%.tmp 
+		echo     - assets/images/>> %pubspec%.tmp 
+	) 
 
+	endlocal
 )
 
 REM 在文件末尾插入自定义内容
@@ -182,7 +183,6 @@ echo   line_length: 80>> %pubspec%.tmp
 REM 将临时文件替换回原始文件
 move /y %pubspec%.tmp %pubspec% >nul
 
-echo Insert dependency complete!
 goto :eof
 
 
@@ -236,35 +236,28 @@ goto :eof
 call :print "Run flutter CLI..."
 
 REM 进入指定文件夹
-cd /d "%1"
+cd /d "%projectPath%"
 
 REM 运行命令
-get create page:home
+
+echo flutter pub get>temp.bat
+call temp.bat
+del temp.bat
+
+echo flutter pub run build_runner build>temp.bat
+call temp.bat
+del temp.bat
+
+@REM echo get create page:home>temp.bat
+@REM call temp.bat
+@REM del temp.bat
+
+@REM echo get create page:mine>temp.bat
+@REM call temp.bat
+@REM del temp.bat
 
 REM 返回到原始目录
 cd /d "%~dp0"
 exit /b
 goto :eof
-
-:runCommands
-REM 运行多个 Flutter 命令
-call :runGetCreatePage
-call :runBuildRunner
-exit /b
-goto :eof
-
-
-:runPubGet
-flutter pub get
-exit /b
-goto :eof
-
-:runGetCreatePage
-get create page:home
-exit /b
-goto :eof
-
-:runBuildRunner
-flutter pub run build_runner build
-exit /b
-goto :eof
+ 

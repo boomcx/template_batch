@@ -2,7 +2,7 @@ export 'params.dart';
 
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
-import './models.dart';
+import '../models.dart';
 import 'params.dart';
 
 part 'api_client.g.dart';

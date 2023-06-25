@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'paging_mixin.txt';
-import ''pull_refresh_control.txt'
+import 'paging_mixin.dart';
+import 'pull_refresh_control.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 
 /// 快速构建 `ListView` 形式的分页列表
@@ -19,7 +19,7 @@ class SpeedyPagedList<T> extends StatelessWidget {
     this.refreshOnStart = true,
     this.startRefreshHeader,
     double? itemExtent,
-  })  : _separatorBuilder = null, 
+  })  : _separatorBuilder = null,
         _itemExtent = itemExtent;
 
   const SpeedyPagedList.separator({

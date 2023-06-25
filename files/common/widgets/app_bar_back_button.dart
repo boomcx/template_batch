@@ -1,6 +1,8 @@
+import '/app/routes/app_pages.dart';
+import '/support_files/assets.gen.dart';
+import '/support_files/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:template_getx/app.dart';
 
 class AppBarBackButton extends StatelessWidget {
   const AppBarBackButton({

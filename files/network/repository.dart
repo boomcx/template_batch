@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
-import 'app.dart';
 
-import 'api_client.txt';
-import 'interceptor.txt';
+import '../common/widgets/toast.dart';
+import 'api_client.dart';
+import 'interceptor.dart';
 
 /// 统一处理错误信息
 void formatError(e) {
-  logger.d(e.toString());
+  // logger.d(e.toString());
   if (e is Response) {
     Toast.showError(e.statusMessage ?? '');
     return;

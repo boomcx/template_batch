@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:template_getx/common/extensions/json_extension.dart';
+import '../common/extensions/json_extension.dart';
 part 'video_list.freezed.dart';
 part 'video_list.g.dart';
 

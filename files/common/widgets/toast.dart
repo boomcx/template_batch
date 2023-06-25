@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 
-import '../../support_files/theme.dart';
-import 'app_progress_indicator.txt';
+import '/support_files/theme.dart';
+import 'app_progress_indicator.dart';
 
 class Toast {
   static NavigatorObserver toastNavigatorObserver() =>
