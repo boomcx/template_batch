@@ -94,17 +94,17 @@ xcopy "%scriptPath%\files" "%1\lib\" /E /I /Y
 set "source_folder=%scriptPath%\assets"
 xcopy "%source_folder%" "%projectPath%\assets" /S /I /Y /V >nul
 
-for %%i in (app main models service tabbar) do (
+@REM for %%i in (app main models service tabbar) do (
 
-    set "source_file=%scriptPath%\files\%%i.dart"
-    set "destination_file=%1\lib\%%i.dart"
+@REM     set "source_file=%scriptPath%\files\%%i.dart"
+@REM     set "destination_file=%1\lib\%%i.dart"
 
-	setlocal enabledelayedexpansion
+@REM 	setlocal enabledelayedexpansion
 
-	( type "!source_file!" ) > "!destination_file!" 
+@REM 	( type "!source_file!" ) > "!destination_file!" 
 
-	endlocal
-)
+@REM 	endlocal
+@REM )
 
 goto :eof
  
