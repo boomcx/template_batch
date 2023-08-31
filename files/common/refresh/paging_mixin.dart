@@ -1,83 +1,63 @@
 import 'dart:async';
 
-import 'package:easy_refresh/easy_refresh.dart';
-
-import 'state.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 mixin PagingMixin<T> {
-  /// 刷新控制器
-  final EasyRefreshController _pagingController = EasyRefreshController(
-      controlFinishLoad: true, controlFinishRefresh: true);
-  EasyRefreshController get pagingController => _pagingController;
-
   /// 初始页码
   int _initPage = 0;
 
+  /// 刷新控制器
+  PagingController<int, T> _pagingController =
+      PagingController(firstPageKey: 0);
+  PagingController<int, T> get pagingController => _pagingController;
+
   /// 当前页码
   int _page = 0;
-  int get page => _page;
-
-  /// 列表数据
-  List<T> get items => _state.items;
-  int get itemCount => items.length;
-
-  /// 错误信息
-  dynamic get error => _state.error;
-
-  /// 关联刷新状态管理的控制器
-  PagingMixinController get state => _state;
-  final PagingMixinController<T> _state = PagingMixinController(
-    PagingMixinData(items: []),
-  );
-
-  /// 是否加载更多
-  bool _isLoadMore = true;
-  bool get isLoadMore => _isLoadMore;
 
   /// 控制刷新结束回调（异步处理）
   Completer? _refreshComplater;
 
+  /// 数据列表
+  List<T> get items => _pagingController.itemList ?? [];
+
   /// 挂载分页器
   /// `controller` 关联刷新状态管理的控制器
   /// `initPage` 初始页码值(分页起始页)
-  /// `isLoadMore` 是否加载更多
-  void initPaging({
-    int initPage = 0,
-    isLoadMore = true,
-  }) {
-    _isLoadMore = isLoadMore;
-    _initPage = initPage;
-    _page = initPage;
+  void initPaging({int initPage = 0}) {
+    // 重置分页器
+    if (_initPage != initPage) {
+      _initPage = initPage;
+      _pagingController.dispose();
+      _pagingController = PagingController(firstPageKey: initPage);
+    }
+
+    _pagingController.addPageRequestListener((pageKey) {
+      fecthData(pageKey);
+    });
   }
 
   /// 获取数据
-  FutureOr fetchData(int page);
+  FutureOr fecthData(int page);
 
   /// 刷新数据
-  Future onRefresh() async {
+  Future onRefresh() {
     _refreshComplater = Completer();
-    _page = _initPage;
-    fetchData(_page);
+    _pagingController.notifyPageRequestListeners(_initPage);
     return _refreshComplater!.future;
   }
 
-  /// 加载更多数据
-  Future onLoad() async {
-    _refreshComplater = Completer();
-    _page++;
-    fetchData(_page);
-    return _refreshComplater!.future;
+  /// 获取数据前调用
+  void beginLoad(int page) {
+    _page = page;
   }
 
   /// 获取数据后调用
   /// `items` 列表数据
   /// `maxCount` 数据总数，如果为0则默认通过 `items` 有无数据判断是否可以分页加载, null为非分页请求
   /// `error` 错误信息
-  /// `limit` 单页显示数量限制，如果items.length < limit 则没有更多数据
   void endLoad(
     List<T>? list, {
     int? maxCount,
-    // int limit = 5,
     dynamic error,
   }) {
     if (_page == _initPage) {
@@ -85,51 +65,47 @@ mixin PagingMixin<T> {
       _refreshComplater = null;
     }
 
-    final dataList = List.of(_state.value.items);
     if (list != null) {
-      if (_page == _initPage) {
-        dataList.clear();
-        // 更新数据
-        _pagingController.finishRefresh();
-        _pagingController.resetFooter();
+      bool hasNoMore = true;
+
+      // 刷新清空历史数据列表
+      if (_page == _initPage && this.items.isNotEmpty) {
+        updateItems([]);
       }
-      dataList.addAll(list);
-      // 更新列表
-      _state.value = _state.value.copyWith(
-        items: dataList,
-        isStartEmpty: page == _initPage && dataList.isEmpty,
-      );
-      if (_page == _initPage) return;
 
       // 默认没有总数量 `maxCount`，用获取当前数据列表是否有值判断
       // 默认有总数量 `maxCount`, 则判断当前请求数据list+历史数据items是否小于总数
       // bool hasNoMore = !((items.length + list.length) < maxCount);
-      bool isNoMore = true;
       if (maxCount != null) {
-        isNoMore = itemCount >= maxCount;
+        print(_pagingController.itemCount);
+        hasNoMore = (list.length + _pagingController.itemCount) >= maxCount;
       }
-      var state = IndicatorResult.success;
-      if (isNoMore) {
-        state = IndicatorResult.noMore;
+
+      if (hasNoMore) {
+        _pagingController.appendLastPage(list);
+      } else {
+        if (list.isNotEmpty) {
+          _pagingController.appendPage(list, _page + 1);
+        }
       }
-      _pagingController.finishLoad(state);
     } else {
-      _state.value = _state.value.copyWith(items: [], error: error ?? '数据请求错误');
+      _pagingController.error = error ?? '数据请求错误';
     }
   }
 
-  /// 外部更新更新数据
+  /// 更新数据列表
   void updateItems(List<T> list) {
-    // 更新列表
-    _state.value = _state.value.copyWith(items: list);
+    _pagingController.itemList = list;
+    // _pagingController.notifyListeners();
   }
 
-  /// 如果本地需要修改列表信息
-  /// 可以参考这里: [updateItems]
-  void insertItems() {
-    // 更新列表
-    final dataList = List.of(items);
-    dataList.insert(0, items.first);
-    _state.value = _state.value.copyWith(items: dataList);
+  /// 重置加载的错误显示
+  void retryLastFailedRequest() {
+    _pagingController.retryLastFailedRequest();
   }
+}
+
+extension PagingControllerEx on PagingController {
+  /// 列表数量
+  int get itemCount => itemList?.length ?? 0;
 }

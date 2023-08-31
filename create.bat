@@ -137,6 +137,7 @@ for /f "eol== delims=" %%a in (%pubspec%) do (
 		echo   hive_flutter: ^^1.1.0>> %pubspec%.tmp
 		echo   bot_toast: ^^4.0.3>> %pubspec%.tmp
 		echo   easy_refresh: ^^3.0.5>> %pubspec%.tmp
+		echo   infinite_scroll_pagination: ^^4.0.0>> %pubspec%.tmp
 		echo   dio: ^^5.0.2>> %pubspec%.tmp
 		echo   retrofit: ^^4.0.1>> %pubspec%.tmp
 		echo   flutter_spinkit: ^^5.1.0>> %pubspec%.tmp
@@ -144,9 +145,8 @@ for /f "eol== delims=" %%a in (%pubspec%) do (
 		echo   cached_network_image: ^^3.2.2>> %pubspec%.tmp
 		echo   event_bus: ^^2.0.0>> %pubspec%.tmp
 		echo   logger: ^^1.2.2>> %pubspec%.tmp
-		echo   star_menu: ^^3.1.4>> %pubspec%.tmp
 		echo   # 启动图: flutter pub run flutter_native_splash:create>> %pubspec%.tmp
-		echo   # flutter_native_splash: ^^2.3.0>> %pubspec%.tmp
+		echo   flutter_native_splash: ^^2.3.0>> %pubspec%.tmp
 	) 
 
 	REM 查找 flutter_lints 行
@@ -160,7 +160,7 @@ for /f "eol== delims=" %%a in (%pubspec%) do (
 		echo   freezed: ^^2.3.5>> %pubspec%.tmp 
 		echo   retrofit_generator: ^^6.0.0+1>> %pubspec%.tmp 
 		echo   # 一键生成启动图标: flutter pub run flutter_launcher_icons>> %pubspec%.tmp 
-		echo   # flutter_launcher_icons: ^^0.13.1>> %pubspec%.tmp 
+		echo   flutter_launcher_icons: ^^0.13.1>> %pubspec%.tmp 
 	) 
 	
 	REM 查找 assets 行
@@ -182,6 +182,34 @@ echo   line_length: 80>> %pubspec%.tmp
 
 REM 将临时文件替换回原始文件
 move /y %pubspec%.tmp %pubspec% >nul
+
+REM 在文件 analysis_options 末尾插入自定义内容
+set analysis=%1\analysis_options.yaml
+
+for /f "eol== delims=" %%a in (%analysis%) do (
+    set "line=%%a"
+    setlocal enabledelayedexpansion
+
+	REM 将当前行写入临时文件
+	echo !line!>> %analysis%.tmp
+
+	endlocal
+)
+
+echo.>> %analysis%.tmp
+echo analyzer:>> %analysis%.tmp
+echo   exclude:>> %analysis%.tmp
+echo     - "**/*.g.dart">> %analysis%.tmp
+echo     - /**/generated/**/*.dart>> %analysis%.tmp
+echo   errors:>> %analysis%.tmp
+echo     invalid_annotation_target: ignore>> %analysis%.tmp
+echo     use_build_context_synchronously: ignore>> %analysis%.tmp
+echo     unused_element: ignore>> %analysis%.tmp
+echo   plugins:>> %analysis%.tmp
+echo     - custom_lint>> %analysis%.tmp
+
+REM 将临时文件替换回原始文件
+move /y %analysis%.tmp %analysis% >nul
 
 goto :eof
 
