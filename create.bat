@@ -140,6 +140,7 @@ for /f "eol== delims=" %%a in (%pubspec%) do (
 		echo   infinite_scroll_pagination: ^^4.0.0>> %pubspec%.tmp
 		echo   dio: ^^5.0.2>> %pubspec%.tmp
 		echo   retrofit: ^^4.0.1>> %pubspec%.tmp
+		echo   flutter_screenutil: ^^5.9.0>> %pubspec%.tmp
 		echo   flutter_spinkit: ^^5.1.0>> %pubspec%.tmp
 		echo   simple_animations: ^^5.0.0+3>> %pubspec%.tmp
 		echo   cached_network_image: ^^3.2.2>> %pubspec%.tmp
