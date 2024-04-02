@@ -21,7 +21,7 @@ const String kRouteHome = '/home';
 ///       binding: HomeBinding(),
 ///     ),
 /// ```
-/// 
+///
 class HomeBinding extends Binding {
   @override
   List<Bind> dependencies() {
@@ -32,4 +32,3 @@ class HomeBinding extends Binding {
     ];
   }
 }
-

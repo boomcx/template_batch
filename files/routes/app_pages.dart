@@ -1,6 +1,4 @@
 import '/pages/godos_detail/godos_detail.dart';
-import '/pages/mine/mine.dart';
-import '/pages/home/home.dart';
 
 import 'package:get/get.dart';
 
@@ -10,28 +8,15 @@ class AppPages {
   AppPages._();
 
   // ignore: constant_identifier_names
-  static const INITIAL = kRouteHome;
+  static const INITIAL = kRouteTabbar;
 
   static final routes = [
     GetPage(
-      name: kRouteHome,
-      // participatesInRootNavigator: true,
+      name: kRouteTabbar,
+      participatesInRootNavigator: true,
       transition: Transition.noTransition,
-      page: () => const TabbarScaffold(
-        type: TabbarType.home,
-        body: HomeView(),
-      ),
-      binding: HomeBinding(),
-    ),
-    GetPage(
-      name: kRouteMine,
-      // participatesInRootNavigator: true,
-      transition: Transition.noTransition,
-      page: () => const TabbarScaffold(
-        type: TabbarType.mine,
-        body: MineView(),
-      ),
-      binding: MineBinding(),
+      page: () => const TabbarScaffold(),
+      binding: TabbarBinding(),
     ),
     GetPage(
       name: kRouteGodosDetail,

@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:get_storage/get_storage.dart';
 import 'app.dart';
 import 'service.dart';
 import 'routes/app_pages.dart';
@@ -21,7 +20,7 @@ _initAsync() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   // 初始化
-  await _initHive();
+  await _initStorage();
   await ScreenUtil.ensureScreenSize();
 
   if (Platform.isAndroid) {
@@ -48,10 +47,8 @@ Future _initAsyncComplete() async {
   );
 }
 
-Future _initHive() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final dir = await getApplicationDocumentsDirectory();
-  Hive.defaultDirectory = dir.path;
+Future _initStorage() async {
+  await GetStorage.init();
 }
 
 class MyApp extends StatefulWidget {

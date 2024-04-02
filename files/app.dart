@@ -1,5 +1,3 @@
-// ignore_for_file: constant_identifier_names
-
 export 'package:get/get.dart' hide Response;
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 

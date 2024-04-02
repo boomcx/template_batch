@@ -1,7 +1,7 @@
+import 'package:get_storage/get_storage.dart';
 import '/service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../widgets/dialogs/common_alert.dart';
@@ -145,17 +145,17 @@ class PermissionUtil {
     if (isGranted) return isGranted;
 
     // 发起权限请求
-    final hiveKey = permissions.map((e) => e.value).join(',');
+    final saveKey = permissions.map((e) => e.value).join(',');
     final status = await _request(permissions, bothGranted: bothGranted);
 
     // 判断是否第一次请求权限
-    final box = Hive.box();
+    final box = GetStorage();
     // 第一次拒绝，不显示打开设置提示
-    final firstReqeust = box.get(hiveKey) == null;
+    final firstReqeust = box.read(saveKey) == null;
 
     // 记录权限请求缓存
     if (firstReqeust) {
-      box.put(hiveKey, hiveKey);
+      box.write(saveKey, saveKey);
       return status.isGranted;
     }
 

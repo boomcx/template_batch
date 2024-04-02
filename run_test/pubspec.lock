@@ -501,6 +501,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "5.0.0-release-candidate-5"
+  get_storage:
+    dependency: "direct main"
+    description:
+      name: get_storage
+      sha256: "39db1fffe779d0c22b3a744376e86febe4ade43bf65e06eab5af707dc84185a2"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.1"
   glob:
     dependency: transitive
     description:
@@ -509,6 +517,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.2"
+  go_router:
+    dependency: transitive
+    description:
+      name: go_router
+      sha256: "5ed2687bc961f33a752017ccaa7edead3e5601b28b6376a5901bf24728556b85"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "13.2.2"
   graphs:
     dependency: transitive
     description:
@@ -517,14 +533,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.3.1"
-  hive:
-    dependency: "direct main"
-    description:
-      name: hive
-      sha256: "10819524df282842ebae12870e2e0e9ebc3e5c4637bec741ad39b919c589cb20"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "4.0.0-dev.2"
   html:
     dependency: transitive
     description:
@@ -605,22 +613,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.4"
-  isar:
-    dependency: transitive
-    description:
-      name: isar
-      sha256: ebf74d87c400bd9f7da14acb31932b50c2407edbbd40930da3a6c2a8143f85a8
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "4.0.0-dev.14"
-  isar_flutter_libs:
-    dependency: "direct main"
-    description:
-      name: isar_flutter_libs
-      sha256: "04a3f4035e213ddb6e78d0132a7c80296a085c2088c2a761b4a42ee5add36983"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "4.0.0-dev.14"
   js:
     dependency: transitive
     description:
@@ -869,6 +861,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.2.1"
+  persistent_bottom_nav_bar_v2:
+    dependency: "direct main"
+    description:
+      name: persistent_bottom_nav_bar_v2
+      sha256: "21170bc486a3e3134f02a54032d40a56babd47b91595ae6b83ad739e2aca1f7a"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "5.1.0"
   petitparser:
     dependency: transitive
     description:

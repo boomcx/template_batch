@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
+import 'package:get_storage/get_storage.dart';
 import '../network/repository.dart';
 import '../models.dart';
 
@@ -11,7 +11,7 @@ const _kUser = 'k_user';
 /// 用户相关的全局处理
 class UserService extends GetxService {
   static UserService get to => Get.find();
-  final box = Hive.box();
+  final box = GetStorage();
 
   /// 用户是否登录
   bool get isLogined => token.token.isNotEmpty;
@@ -24,12 +24,12 @@ class UserService extends GetxService {
 
   @override
   void onReady() {
-    final tokenStr = box.get(_kAppToken, defaultValue: '') as String;
+    final tokenStr = box.read(_kAppToken) ?? '';
     if (tokenStr.isNotEmpty) {
       // 获取本地鉴权信息
       token = AppToken.fromJson(jsonDecode(tokenStr));
       // 获取用户信息
-      final userStr = box.get(_kUser, defaultValue: '') as String;
+      final userStr = box.read(_kUser) ?? '';
       if (userStr.isNotEmpty) {
         user.value = User.fromJson(jsonDecode(userStr));
       }
@@ -54,7 +54,8 @@ class UserService extends GetxService {
     token = const AppToken();
     user.value = const User();
 
-    // 清除本地
-    box.clear();
+    // 清除本地，针对删除
+    box.read(_kAppToken);
+    box.read(_kUser);
   }
 }

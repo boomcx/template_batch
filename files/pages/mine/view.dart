@@ -8,8 +8,8 @@ class MineView extends GetView<MineController> {
 
   // 主视图
   Widget _buildView() {
-    return const Center(
-      child: Text("MineView"),
+    return Center(
+      child: Text("MineView ${controller.count}"),
     );
   }
 

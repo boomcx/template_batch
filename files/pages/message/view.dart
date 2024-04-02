@@ -8,8 +8,8 @@ class MessageView extends GetView<MessageController> {
 
   // 主视图
   Widget _buildView() {
-    return const Center(
-      child: Text("MessageView"),
+    return  Center(
+      child: Text("MessageView ${controller.count}"),
     );
   }
 

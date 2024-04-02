@@ -138,6 +138,10 @@ for /f "eol== delims=" %%a in (%pubspec%) do (
 		echo   get^: ^^5.0.0-release-candidate-5>> %pubspec%.tmp
 
 		echo.  >>   %pubspec%.tmp
+		echo   # tabbar>> %pubspec%.tmp
+		echo   persistent_bottom_nav_bar_v2^: ^^5.1.0>> %pubspec%.tmp
+
+		echo.  >>   %pubspec%.tmp
 		echo   # json 解析注解>> %pubspec%.tmp
 		echo   json_annotation: ^^4.8.1>> %pubspec%.tmp
 
@@ -150,9 +154,8 @@ for /f "eol== delims=" %%a in (%pubspec%) do (
 		echo   flutter_hooks: ^^0.20.3>> %pubspec%.tmp
 
 		echo.  >>   %pubspec%.tmp
-		echo   # 本地缓存, 新版本会用到 isar_flutter_libs>> %pubspec%.tmp
-		echo   hive: ^^4.0.0-dev.2>> %pubspec%.tmp
-		echo   isar_flutter_libs: ^^4.0.0-dev.13>> %pubspec%.tmp
+		echo   # 本地缓存>> %pubspec%.tmp
+		echo   get_storage: ^^2.1.1>> %pubspec%.tmp
 
 		echo.  >>   %pubspec%.tmp
 		echo   # 消息吐司>> %pubspec%.tmp
@@ -233,6 +236,7 @@ for /f "eol== delims=" %%a in (%pubspec%) do (
 	if !errorlevel! equ 0 (
 		REM 在 flutter_lints 行之后插入新的依赖项
 		@REM echo !line!>> %pubspec%.tmp
+		echo.  >>   %pubspec%.tmp
 		echo   build_runner: ^^2.3.3>> %pubspec%.tmp 
 		echo   flutter_gen_runner: ^^5.2.0>> %pubspec%.tmp 
 		echo   json_serializable: ^^6.7.0>> %pubspec%.tmp 
@@ -240,7 +244,7 @@ for /f "eol== delims=" %%a in (%pubspec%) do (
 		echo   retrofit_generator: ^^6.0.0+1>> %pubspec%.tmp 
 		echo   # 一键生成启动图标: flutter pub run flutter_launcher_icons>> %pubspec%.tmp 
 		echo   flutter_launcher_icons: ^^0.13.1>> %pubspec%.tmp 
-	 
+		echo.  >>   %pubspec%.tmp
 	) 
 	
 	REM 查找 assets 行
