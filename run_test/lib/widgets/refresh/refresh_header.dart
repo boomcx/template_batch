@@ -1,5 +1,6 @@
-import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
+
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:simple_animations/simple_animations.dart';
 

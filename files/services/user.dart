@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../network/repository.dart';
+
 import '../models.dart';
+import '../network/repository.dart';
 
 const _kAppToken = 'k_app_token';
 const _kUser = 'k_user';

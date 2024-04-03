@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+
+import 'package:dio/dio.dart';
 
 import '../app.dart';
 import '../service.dart';

@@ -1,6 +1,6 @@
-import '/support_files/assets.gen.dart';
 import 'package:flutter/material.dart';
 
+import '/support_files/assets.gen.dart';
 import 'app_progress_indicator.dart';
 
 /// 搜索结果为空

@@ -1,6 +1,7 @@
 library godos_detail;
 
 import 'package:get/get.dart';
+
 import './controller.dart';
 
 export './controller.dart';

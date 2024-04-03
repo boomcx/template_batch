@@ -1,11 +1,12 @@
 import 'dart:math';
 
-import '/utils/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:get/get.dart';
 
+import '/utils/common.dart';
 import 'app_bar_back_button.dart';
 
 class AAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -66,7 +67,7 @@ class AAppBar extends StatelessWidget implements PreferredSizeWidget {
               : null,
         ),
         child: AppBar(
-          backgroundColor: backgroundColor ?? Colors.white,
+          backgroundColor: backgroundColor,
           titleSpacing: 0,
           leadingWidth: leadingWidth ?? kMinInteractiveDimensionCupertino + 2,
           leading: _buildLeading(context),

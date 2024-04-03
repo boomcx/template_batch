@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:run_test/pages/mine/theme_change/theme_change.dart';
+
 import '../../app.dart';
 import 'controller.dart';
 
@@ -9,7 +11,18 @@ class MineView extends GetView<MineController> {
   // 主视图
   Widget _buildView() {
     return Center(
-      child: Text("MineView ${controller.count}"),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text("MineView ${controller.count}").paddingOnly(bottom: 20),
+          ElevatedButton(
+            onPressed: () {
+              Get.toNamed(kRouteThemeChange);
+            },
+            child: const Text('changeDarkMode'),
+          ),
+        ],
+      ),
     );
   }
 

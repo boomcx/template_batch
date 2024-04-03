@@ -1,6 +1,7 @@
 library message;
 
 import 'package:get/get.dart';
+
 import './controller.dart';
 
 export './controller.dart';
@@ -21,7 +22,7 @@ const String kRouteMessage = '/message';
 ///       binding: MessageBinding(),
 ///     ),
 /// ```
-/// 
+///
 class MessageBinding extends Binding {
   @override
   List<Bind> dependencies() {
@@ -32,4 +33,3 @@ class MessageBinding extends Binding {
     ];
   }
 }
-

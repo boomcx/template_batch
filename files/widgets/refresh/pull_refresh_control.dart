@@ -1,5 +1,6 @@
-import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
+
+import 'package:easy_refresh/easy_refresh.dart';
 
 import 'paging_mixin.dart';
 import 'refresh_header.dart';

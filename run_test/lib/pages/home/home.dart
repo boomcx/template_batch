@@ -1,6 +1,7 @@
 library home;
 
 import 'package:get/get.dart';
+
 import './controller.dart';
 
 export './controller.dart';

@@ -1,7 +1,8 @@
-// ignore_for_file: non_constant_identifier_names
-
 import 'package:flutter/material.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+// ignore_for_file: non_constant_identifier_names
 
 /// 根据主题配置，设置字体风格
 ///

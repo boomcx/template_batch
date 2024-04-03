@@ -1,5 +1,6 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+
+import 'package:extended_image/extended_image.dart';
 
 /// make hero better when slide out
 class HeroWidget extends StatefulWidget {

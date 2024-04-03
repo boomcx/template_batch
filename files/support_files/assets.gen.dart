@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
 ///  FlutterGen
@@ -6,8 +8,6 @@
 // coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
-
-import 'package:flutter/widgets.dart';
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
@@ -20,12 +20,21 @@ class $AssetsImagesGen {
   AssetGenImage get icHomeSlt =>
       const AssetGenImage('assets/images/ic_home_slt.png');
 
+  /// File path: assets/images/ic_mine_nor.png
+  AssetGenImage get icMineNor =>
+      const AssetGenImage('assets/images/ic_mine_nor.png');
+
+  /// File path: assets/images/ic_mine_slt.png
+  AssetGenImage get icMineSlt =>
+      const AssetGenImage('assets/images/ic_mine_slt.png');
+
   /// File path: assets/images/ic_nav_back.png
   AssetGenImage get icNavBack =>
       const AssetGenImage('assets/images/ic_nav_back.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [icHomeNor, icHomeSlt, icNavBack];
+  List<AssetGenImage> get values =>
+      [icHomeNor, icHomeSlt, icMineNor, icMineSlt, icNavBack];
 }
 
 class Assets {

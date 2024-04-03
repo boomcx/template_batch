@@ -1,7 +1,7 @@
-import '/pages/godos_detail/godos_detail.dart';
-
 import 'package:get/get.dart';
 
+import '/pages/godos_detail/godos_detail.dart';
+import '/pages/mine/theme_change/theme_change.dart';
 import '/tabbar.dart';
 
 class AppPages {
@@ -22,6 +22,11 @@ class AppPages {
       name: kRouteGodosDetail,
       page: () => GodosDetailView(id: '${Get.parameters['id']}'),
       binding: GodosDetailBinding(),
+    ),
+    GetPage(
+      name: kRouteThemeChange,
+      page: () => const ThemeChangeView(),
+      binding: ThemeChangeBinding(),
     ),
   ];
 }

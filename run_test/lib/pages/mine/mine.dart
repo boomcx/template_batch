@@ -1,6 +1,7 @@
 library mine;
 
 import 'package:get/get.dart';
+
 import './controller.dart';
 
 export './controller.dart';
@@ -21,7 +22,7 @@ const String kRouteMine = '/mine';
 ///       binding: MineBinding(),
 ///     ),
 /// ```
-/// 
+///
 class MineBinding extends Binding {
   @override
   List<Bind> dependencies() {
@@ -32,4 +33,3 @@ class MineBinding extends Binding {
     ];
   }
 }
-

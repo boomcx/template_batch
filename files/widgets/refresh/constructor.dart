@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import 'paging_mixin.dart';
 import 'pull_refresh_control.dart';
-import 'package:easy_refresh/easy_refresh.dart';
-
 import 'refresh_footer.dart';
 
 /// 快速构建 `ListView` 形式的分页列表
@@ -211,4 +211,4 @@ class SpeedyPagedList<T> extends StatelessWidget {
 //     );
 //   }
 // }
-// 
+//

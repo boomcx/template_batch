@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../extensions/json_extension.dart';
+
 part 'video_list.freezed.dart';
 part 'video_list.g.dart';
 

@@ -1,5 +1,6 @@
-// 接口请求参数
 import 'package:json_annotation/json_annotation.dart';
+
+// 接口请求参数
 part 'params.g.dart';
 
 @JsonSerializable()

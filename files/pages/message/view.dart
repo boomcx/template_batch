@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
+import '../../app.dart';
 import 'controller.dart';
 
 class MessageView extends GetView<MessageController> {
@@ -8,7 +8,7 @@ class MessageView extends GetView<MessageController> {
 
   // 主视图
   Widget _buildView() {
-    return  Center(
+    return Center(
       child: Text("MessageView ${controller.count}"),
     );
   }
@@ -16,7 +16,7 @@ class MessageView extends GetView<MessageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("message")),
+      appBar: const AAppBar(title: 'MessageView'),
       body: SafeArea(
         child: _buildView(),
       ),

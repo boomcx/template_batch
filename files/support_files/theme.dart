@@ -1,9 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 /// 配置字体
 /// color  + fontSize + weight + line
@@ -37,6 +38,31 @@ const _appColors = AppColors(
   text6: Color(0xFFFF3232),
   text7: Color(0xFF83521A),
   border: Color(0xFFD0D3DE),
+);
+
+/// 翻转颜色
+const _apInvertColors = AppColors(
+  primary: Color(0xFFe9a200),
+  secondary: Color(0xFFcc40a9),
+  comFFF: Color(0xFF000000),
+  com000: Color(0xFFFFFFFF),
+  background: Color(0xFF090705),
+  backgroundGrey: Color(0xFF001515),
+  divider: Color(0xFF090705),
+  shimmerBaseColor: Color(0xFF202020),
+  shimmerHighlightColor: Color(0xFF333333),
+  barrierColor: Color(0x43010101),
+  textPlaceholder: Color(0xFF4e4b3c),
+  textPlaceholderGray: Color(0xFFa29984),
+  text: Color(0xFFf4ead9),
+  text1: Color(0xFF726c59),
+  text2: Color(0xFF4e4b3c),
+  text3: Color(0xFF2f2c21),
+  text4: Color(0xFFa29984),
+  text5: Color(0xFFcc40a9),
+  text6: Color(0xFF00cdcd),
+  text7: Color(0xFF7cade5),
+  border: Color(0xFF2f2c21),
 );
 
 class AppColors extends ThemeExtension<AppColors> {
@@ -208,72 +234,229 @@ class AppColors extends ThemeExtension<AppColors> {
   }
 }
 
+/// 记录主题配色标识
+const _kThemeDataKey = 'theme_data_name';
+
+/// 自定义多主题
+final kCustomThemeConfig = {
+  'dark': _apInvertColors,
+  'invert': _apInvertColors,
+  'light': _appColors,
+};
+
+class ThemeManager {
+  ThemeManager._();
+
+  static ThemeManager get to => _getInstance();
+  static ThemeManager? _instance;
+
+  static ThemeManager _getInstance() {
+    _instance ??= ThemeManager._();
+
+    // 初始化
+    GetStorage box = GetStorage();
+    _instance!.isDarkMode = box.read(_kThemeDataKey) == ThemeMode.dark.name;
+
+    return _instance!;
+  }
+
+  /// 是否仅显示深夜模式+白天模式
+  /// 否则色值为 `false`
+  final _onlyDarkMode = false;
+
+  /// 深夜模式
+  late bool isDarkMode;
+
+  /// 当前主题模式
+  ThemeMode get mode {
+    GetStorage box = GetStorage();
+    if (box.read(_kThemeDataKey) == null) {
+      return ThemeMode.system;
+    }
+    if (!_onlyDarkMode) {
+      return ThemeMode.light;
+    }
+    return isDarkMode ? ThemeMode.dark : ThemeMode.light;
+  }
+
+  /// 切换主题模式, 仅 `_onlyDarkMode = true` 下使用
+  changeDarkMode() {
+    Get.changeThemeMode(isDarkMode ? ThemeMode.light : ThemeMode.dark);
+    isDarkMode = !isDarkMode;
+    GetStorage box = GetStorage();
+    box.write(_kThemeDataKey,
+        isDarkMode ? ThemeMode.dark.name : ThemeMode.light.name);
+
+    // Future.delayed(Durations.extralong4, () {
+    //   Get.forceAppUpdate();
+    // });
+  }
+
+  /// 获取对应主题, 仅 `_onlyDarkMode = true` 下使用
+  ThemeData themeData([bool isDarkMode = false]) {
+    final colors = !isDarkMode ? _appColors : _apInvertColors;
+
+    return getThemeDataWithAppColors(colors);
+  }
+
+  /// 切换多主题模式
+  changeTheme(String keyName) {
+    GetStorage box = GetStorage();
+    box.write(_kThemeDataKey, keyName);
+    final data =
+        getThemeDataWithAppColors(kCustomThemeConfig[keyName] ?? _appColors);
+    Get.changeTheme(data);
+  }
+
+  /// 获取当前的主题配色
+  ThemeData getThemeData() {
+    GetStorage box = GetStorage();
+    final key = box.read(_kThemeDataKey) ?? 'light';
+    return getThemeDataWithAppColors(kCustomThemeConfig[key] ?? _appColors);
+  }
+
+  /// 根据当前扩展主题配色，获取当前的主题配色
+  getThemeDataWithAppColors(AppColors colors) {
+    return ThemeData(
+      primaryColor: colors.primary,
+      canvasColor: Colors.transparent,
+      scaffoldBackgroundColor: colors.background,
+      splashFactory: NoSplash.splashFactory,
+      splashColor: Colors.transparent, // 点击时的高亮效果设置为透明
+      highlightColor: Colors.transparent, // 长按时的扩散效果设置为透明
+      // fontFamily: 'PingFang SC',
+      navigationBarTheme: NavigationBarThemeData(
+        surfaceTintColor: colors.comFFF,
+        shadowColor: colors.com000,
+        backgroundColor: colors.background,
+        elevation: 8,
+      ),
+      bottomAppBarTheme: BottomAppBarTheme(
+        surfaceTintColor: colors.comFFF,
+        color: colors.comFFF,
+        shadowColor: colors.com000,
+        elevation: 8,
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        // selectionHandleColor: _appColors.primary.withOpacity(0.8),
+        selectionColor: colors.primary.withOpacity(0.2),
+      ),
+      textTheme: TextTheme(
+        bodyMedium: TextStyle(
+          color: colors.text,
+          fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
+          fontWeight: FontWeight.normal,
+        ),
+        // 大部分地方的文字颜色
+        titleMedium: TextStyle(
+          color: colors.text,
+          fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
+          fontWeight: FontWeight.normal,
+        ),
+      ),
+      cupertinoOverrideTheme: NoDefaultCupertinoThemeData(
+        primaryColor: colors.primary,
+        textTheme: CupertinoTextThemeData(
+          textStyle: TextStyle(
+            color: colors.text,
+            fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
+            fontWeight: FontWeight.normal,
+          ),
+          navTitleTextStyle: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w500,
+            color: colors.text,
+            fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
+          ),
+        ),
+      ),
+      appBarTheme: AppBarTheme(
+        surfaceTintColor: colors.comFFF,
+        backgroundColor: colors.comFFF,
+        iconTheme: IconThemeData(color: colors.text),
+        titleTextStyle: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+          color: colors.text,
+          fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
+        ),
+        centerTitle: true,
+        elevation: 0,
+        systemOverlayStyle: kSystemUiOverlayStyle,
+      ),
+      dividerColor: colors.divider,
+      // highlightColor: Colors.black.withOpacity(0.05),
+      extensions: [colors],
+    );
+  }
+}
+
 /// 默认主题配置
-final appThemeData = ThemeData(
-  primaryColor: _appColors.primary,
-  canvasColor: Colors.transparent,
-  scaffoldBackgroundColor: _appColors.background,
-  splashFactory: NoSplash.splashFactory,
-  splashColor: Colors.transparent, // 点击时的高亮效果设置为透明
-  highlightColor: Colors.transparent, // 长按时的扩散效果设置为透明
-  // fontFamily: 'PingFang SC',
-  bottomAppBarTheme: const BottomAppBarTheme(
-    surfaceTintColor: Colors.white,
-    color: Colors.white,
-    shadowColor: Colors.black,
-    elevation: 8,
-  ),
-  textSelectionTheme: TextSelectionThemeData(
-    // selectionHandleColor: _appColors.primary.withOpacity(0.8),
-    selectionColor: _appColors.primary.withOpacity(0.2),
-  ),
-  textTheme: TextTheme(
-    bodyMedium: TextStyle(
-      color: _appColors.text,
-      fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
-      fontWeight: FontWeight.normal,
-    ),
-    // 大部分地方的文字颜色
-    titleMedium: TextStyle(
-      color: _appColors.text,
-      fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
-      fontWeight: FontWeight.normal,
-    ),
-  ),
-  cupertinoOverrideTheme: NoDefaultCupertinoThemeData(
-    primaryColor: _appColors.primary,
-    textTheme: CupertinoTextThemeData(
-      textStyle: TextStyle(
-        color: _appColors.text,
-        fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
-        fontWeight: FontWeight.normal,
-      ),
-      navTitleTextStyle: TextStyle(
-        fontSize: 17,
-        fontWeight: FontWeight.w500,
-        color: _appColors.text,
-        fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
-      ),
-    ),
-  ),
-  appBarTheme: AppBarTheme(
-    surfaceTintColor: Colors.white,
-    backgroundColor: _appColors.comFFF,
-    iconTheme: IconThemeData(color: _appColors.text),
-    titleTextStyle: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.bold,
-      color: _appColors.text,
-      fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
-    ),
-    centerTitle: true,
-    elevation: 0,
-    systemOverlayStyle: kSystemUiOverlayStyle,
-  ),
-  dividerColor: _appColors.divider,
-  // highlightColor: Colors.black.withOpacity(0.05),
-  extensions: const [_appColors],
-);
+// final appThemeData = ThemeData(
+//   primaryColor: _appColors.primary,
+//   canvasColor: Colors.transparent,
+//   scaffoldBackgroundColor: _appColors.background,
+//   splashFactory: NoSplash.splashFactory,
+//   splashColor: Colors.transparent, // 点击时的高亮效果设置为透明
+//   highlightColor: Colors.transparent, // 长按时的扩散效果设置为透明
+//   // fontFamily: 'PingFang SC',
+//   bottomAppBarTheme: BottomAppBarTheme(
+//     surfaceTintColor: _appColors.comFFF,
+//     color: _appColors.comFFF,
+//     shadowColor: _appColors.com000,
+//     elevation: 8,
+//   ),
+//   textSelectionTheme: TextSelectionThemeData(
+//     // selectionHandleColor: _appColors.primary.withOpacity(0.8),
+//     selectionColor: _appColors.primary.withOpacity(0.2),
+//   ),
+//   textTheme: TextTheme(
+//     bodyMedium: TextStyle(
+//       color: _appColors.text,
+//       fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
+//       fontWeight: FontWeight.normal,
+//     ),
+//     // 大部分地方的文字颜色
+//     titleMedium: TextStyle(
+//       color: _appColors.text,
+//       fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
+//       fontWeight: FontWeight.normal,
+//     ),
+//   ),
+//   cupertinoOverrideTheme: NoDefaultCupertinoThemeData(
+//     primaryColor: _appColors.primary,
+//     textTheme: CupertinoTextThemeData(
+//       textStyle: TextStyle(
+//         color: _appColors.text,
+//         fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
+//         fontWeight: FontWeight.normal,
+//       ),
+//       navTitleTextStyle: TextStyle(
+//         fontSize: 17,
+//         fontWeight: FontWeight.w500,
+//         color: _appColors.text,
+//         fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
+//       ),
+//     ),
+//   ),
+//   appBarTheme: AppBarTheme(
+//     surfaceTintColor: _appColors.comFFF,
+//     backgroundColor: _appColors.comFFF,
+//     iconTheme: IconThemeData(color: _appColors.text),
+//     titleTextStyle: TextStyle(
+//       fontSize: 18,
+//       fontWeight: FontWeight.bold,
+//       color: _appColors.text,
+//       fontFamilyFallback: const ['PingFang SC', 'Heiti SC'],
+//     ),
+//     centerTitle: true,
+//     elevation: 0,
+//     systemOverlayStyle: kSystemUiOverlayStyle,
+//   ),
+//   dividerColor: _appColors.divider,
+//   // highlightColor: Colors.black.withOpacity(0.05),
+//   extensions: const [_appColors, _apInvertColors],
+// );
 
 const kDefaultAnimationDuration = Duration(milliseconds: 250);
 final kPadding_24 = 16.0.r;

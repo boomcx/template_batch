@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../app.dart';
 
+import '../../app.dart';
 import '../godos_detail/godos_detail.dart';
 import 'controller.dart';
 

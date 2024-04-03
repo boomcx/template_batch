@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+
 import './pages/message/message.dart';
 import '/pages/home/home.dart';
 import '/pages/mine/mine.dart';

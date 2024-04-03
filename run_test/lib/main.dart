@@ -1,12 +1,15 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get_storage/get_storage.dart';
+
 import 'app.dart';
-import 'service.dart';
 import 'routes/app_pages.dart';
+import 'service.dart';
 
 void main() async {
   await _initAsync();
@@ -71,7 +74,12 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: const Size(375, 812));
     return GetMaterialApp(
-      theme: appThemeData,
+      // 多主题切换
+      // theme: ThemeManager.to.getThemeData(),
+      // 仅有深色模式切换，可以用下列方式
+      themeMode: ThemeManager.to.mode,
+      theme: ThemeManager.to.themeData(),
+      darkTheme: ThemeManager.to.themeData(true),
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
       // unknownRoute: AppPages.unknownRoute,
