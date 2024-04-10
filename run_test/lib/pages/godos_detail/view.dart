@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import 'package:run_test/tabbar.dart';
@@ -8,15 +6,7 @@ import '../../app.dart';
 import 'godos_detail.dart';
 
 class GodosDetailView extends GetView<GodosDetailController> {
-  const GodosDetailView({
-    super.key,
-    required this.id,
-  });
-
-  final String id;
-
-  @override
-  String? get tag => id;
+  const GodosDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +15,16 @@ class GodosDetailView extends GetView<GodosDetailController> {
       body: Center(
         child: ElevatedButton(
           onPressed: () {
-            final rand = Random().nextInt(100);
-
-            if (rand > 50) {
+            if (controller.title > 300) {
               Get.toNamed(kRouteGodosDetail, parameters: {
-                'id': rand.toString(),
+                'id': controller.title.toString(),
               });
             } else {
               TabbarController.to.jumpToTab(TabbarType.mine);
             }
           },
-          child: Text("NewsDetailView ${controller.title}"),
+          child: Text(
+              "NewsDetailView - ${Get.parameters['id']} - ${controller.title}"),
         ),
       ),
     );

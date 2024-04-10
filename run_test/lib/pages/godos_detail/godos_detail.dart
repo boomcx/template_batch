@@ -27,9 +27,8 @@ class GodosDetailBinding extends Binding {
   @override
   List<Bind> dependencies() {
     return [
-      Bind.lazyPut<GodosDetailController>(
-        () => GodosDetailController(),
-        tag: Get.parameters['id'],
+      Bind.create<GodosDetailController>(
+        (_) => GodosDetailController(),
       )
     ];
   }

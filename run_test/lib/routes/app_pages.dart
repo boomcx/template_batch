@@ -20,7 +20,7 @@ class AppPages {
     ),
     GetPage(
       name: kRouteGodosDetail,
-      page: () => GodosDetailView(id: '${Get.parameters['id']}'),
+      page: () => const GodosDetailView(),
       binding: GodosDetailBinding(),
     ),
     GetPage(

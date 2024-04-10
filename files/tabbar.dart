@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:run_test/app.dart';
+import 'package:run_test/service.dart';
 
 import './pages/message/message.dart';
 import '/pages/home/home.dart';
 import '/pages/mine/mine.dart';
+import 'widgets/common/redirect_bottom_bar.dart';
 
 enum TabbarType {
   home,
@@ -74,8 +77,29 @@ class TabbarScaffold extends GetView<TabbarController> {
           )
           .toList(),
       navBarBuilder: (navBarConfig) {
-        return Style1BottomNavBar(
+        return RedirectBottomNavBar(
           navBarConfig: navBarConfig,
+          onRedirected: (index) async {
+            if (index == TabbarType.values.length - 1 &&
+                !UserService.to.isLogined) {
+              Get.dialog(AlertDialog(
+                title: const Text('鉴权拦截处理'),
+                content: const Text('点击按钮模拟登录操作，进入`个人中心`'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      UserService.to.login();
+                      Get.back();
+                      controller.persistent.jumpToTab(index);
+                    },
+                    child: const Text('登录'),
+                  )
+                ],
+              ));
+              return true;
+            }
+            return null;
+          },
           navBarDecoration: const NavBarDecoration(
             color: Colors.white,
             // borderRadius: BorderRadius.circular(2),

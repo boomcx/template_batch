@@ -43,7 +43,9 @@ class UserService extends GetxService {
     NetRepository.client.logout();
   }
 
-  login() {}
+  login() {
+    token = const AppToken(token: 'test_token');
+  }
 
   logout() {
     removeUser();
