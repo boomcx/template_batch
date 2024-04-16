@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:run_test/pages/mine/theme_change/theme_change.dart';
+import '/pages/mine/theme_change/theme_change.dart';
 
 import '../../app.dart';
 import 'controller.dart';

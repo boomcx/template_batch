@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'package:run_test/tabbar.dart';
+import '/tabbar.dart';
 
 import '../../app.dart';
 import 'godos_detail.dart';
