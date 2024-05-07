@@ -49,7 +49,7 @@ class TabbarController extends GetxController {
 
   /// 指定切换到根路径
   void jumpToTab([TabbarType type = TabbarType.home]) {
-    Get.toNamed(kRouteTabbar);
+    Get.offAllNamed(kRouteTabbar);
     persistent.jumpToTab(TabbarType.values.indexOf(type));
   }
 }
