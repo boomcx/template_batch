@@ -106,6 +106,9 @@ dependencies:
   # 设备信息
   device_info_plus: ^9.1.2
 
+  # 打开url
+  url_launcher: ^6.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -89,9 +89,9 @@ call :print "Generate configuration files..."
 
 @REM )
   
-xcopy "%scriptPath%\files" "%1\lib\" /E /I /Y
+xcopy "%scriptPath%\copy_file\lib" "%1\lib\" /E /I /Y
 
-set "source_folder=%scriptPath%\assets"
+set "source_folder=%scriptPath%\copy_file\assets"
 xcopy "%source_folder%" "%projectPath%\assets" /S /I /Y /V >nul
 
 @REM for %%i in (app main models service tabbar) do (
