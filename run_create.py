@@ -89,8 +89,7 @@ if not os.path.exists(project_path):
 
 # 项目类型
 project_type = get_project_type(
-    f"""
-请选择项目目录结构：
+    f"""请选择项目目录结构：
 1. 单页面模版
 2. tabs结构模板
 """
@@ -264,6 +263,6 @@ analyzer:
     )
 
 
-print("*** 执行 dart pub run build_runner build ...")
-# os.system(f"cd {project_name}")
-# os.system(f"dart pub run build_runner build")
+print("*** 执行 dart run build_runner build ...")
+os.chdir(os.path.join(project_path, project_name))
+os.system(f"dart run build_runner build")
