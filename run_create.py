@@ -6,6 +6,24 @@ import code
 import sys
 
 
+print(
+    """
+
+欢迎使用 Flutter 项目快速创建脚本！
+ _                           _         _                         _         
+| |                         | |       | |                       | |        
+| |_  ___  _ __ ___   _ __  | |  __ _ | |_  ___      __ _   ___ | |_ __  __
+| __|/ _ \| '_ ` _ \ | '_ \ | | / _` || __|/ _ \    / _` | / _ \| __|\ \/ /
+| |_|  __/| | | | | || |_) || || (_| || |_|  __/   | (_| ||  __/| |_  >  < 
+ \__|\___||_| |_| |_|| .__/ |_| \__,_| \__|\___|    \__, | \___| \__|/_/\_\
+     
+                     | |                     ______  __/ |                 
+                     |_|                    |______||___/    
+      
+      """
+)
+
+
 # 用户输入项目名称
 def get_project_name(prompt):
     while True:
@@ -107,12 +125,12 @@ os.system(f"flutter create --platforms ios,android {project_name} --org {project
 
 print("*** 复制模版文件...")
 # assets
-copy_folder(f"{scriptPath}/copy_file/assets", f"{project_path}/{project_name}/assets")
+copy_folder(
+    f"{scriptPath}/tabs_template/assets", f"{project_path}/{project_name}/assets"
+)
 
 # lib
-source_lib = (
-    f"{scriptPath}/copy_file/{'lib_base' if project_type == '1'  else  'lib_tabs' }"
-)
+source_lib = f"{scriptPath}/{'simple_template' if project_type == '1'  else  'tabs_template' }/lib"
 print(source_lib)
 copy_folder(source_lib, f"{project_path}/{project_name}/lib")
 

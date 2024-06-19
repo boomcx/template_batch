@@ -8,6 +8,6 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
-    "copy_file": true
+    // "copy_file": true
   }
 }
