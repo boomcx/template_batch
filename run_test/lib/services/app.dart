@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:get/get.dart';
@@ -8,13 +11,41 @@ class AppNeedToLogin {}
 class AppService extends GetxService {
   static AppService get to => Get.find();
 
+  /// 全局通知
+  static EventBus get bus => to._bus;
+  final _bus = EventBus();
+
   /// 获取设备的唯一编码
   SystemDevice device = SystemDevice();
+
+  /// 网络连接状态
+  var connectivityResult = <ConnectivityResult>[].obs;
+  StreamSubscription<List<ConnectivityResult>>? _subscription;
+
+  /// 是否建立网络连接
+  bool get isConnected =>
+      !connectivityResult.value.contains(ConnectivityResult.none);
 
   @override
   void onInit() async {
     super.onInit();
+    initDeviceInfo();
+    initConnectivity();
+  }
 
+  /// 网络连接
+  initConnectivity() async {
+    connectivityResult.value = await (Connectivity().checkConnectivity());
+    _subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> result) {
+      // Received changes in available connectivity types!
+      connectivityResult.value = result;
+    });
+  }
+
+  /// 初始化设备信息
+  initDeviceInfo() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 
     if (GetPlatform.isAndroid) {
@@ -36,9 +67,11 @@ class AppService extends GetxService {
     print(device.toString());
   }
 
-  /// 全局通知
-  static EventBus get bus => to._bus;
-  final _bus = EventBus();
+  @override
+  void onClose() {
+    _subscription?.cancel();
+    super.onClose();
+  }
 }
 
 /// 系统设备信息

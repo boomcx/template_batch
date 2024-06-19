@@ -131,14 +131,14 @@ modfy_file(
     sdk: flutter
 
   # 状态管理库
-  get: ^5.0.0-release-candidate-5
+  get: ^5.0.0-release-candidate-6
 
   # 路由管理
   # go_router: ^13.2.2
   persistent_bottom_nav_bar_v2: ^5.1.0
 
   # json 解析注解
-  json_annotation: ^4.8.1
+  json_annotation: ^4.9.0
 
   # frezzed 注解
   freezed_annotation: ^2.4.1
@@ -153,22 +153,22 @@ modfy_file(
   bot_toast: ^4.1.3
 
   # 刷新
-  easy_refresh: ^3.3.3+1
+  easy_refresh: ^3.4.0
 
   # 滚动加载更多
   infinite_scroll_pagination: ^4.0.0
 
   # 网络请求
-  dio: ^5.4.0
+  dio: ^5.4.3+1
 
   # 网络请求注解
-  retrofit: ^4.0.3
+  retrofit: ^4.1.0
 
   # 像素适配
-  flutter_screenutil: ^5.9.0
+  flutter_screenutil: ^5.9.3
 
   # 加载动画
-  flutter_spinkit: ^5.2.0
+  flutter_spinkit: ^5.2.1
 
   # 快速构建animation builder
   simple_animations: ^5.0.2
@@ -177,30 +177,30 @@ modfy_file(
   event_bus: ^2.0.0
 
   # 相册 / 相机
-  photo_view: ^0.14.0
-  wechat_assets_picker: ^9.0.0-dev.2
-  wechat_camera_picker: ^4.2.0-dev.3
+  photo_view: ^0.15.0
+  wechat_assets_picker: ^9.0.4
+  wechat_camera_picker: ^4.2.2
 
   # 启动图: flutter pub run flutter_native_splash:create
-  flutter_native_splash: ^2.3.0
+  flutter_native_splash: ^2.4.0
 
   # 文件路径
-  path_provider: ^2.1.1
+  path_provider: ^2.1.3
 
   # 图片
-  extended_image: ^8.2.0
+  extended_image: ^8.2.1
 
   # 图片保存
   image_gallery_saver: ^2.0.3
 
   # 系统操作权限
-  permission_handler: ^11.1.0
+  permission_handler: ^11.3.1
 
   # App包信息
-  package_info_plus: ^5.0.1
+  package_info_plus: ^8.0.0
 
   # 设备信息
-  device_info_plus: ^9.1.2
+  device_info_plus: ^10.1.0
 
   # 打开url
   url_launcher: ^6.3.0
@@ -213,11 +213,11 @@ modfy_file(
     "flutter_lints: ^3.0.0",
     """
   flutter_lints: ^3.0.0
-  build_runner: ^2.3.3
-  flutter_gen_runner: ^5.2.0
-  json_serializable: ^6.7.0
-  freezed: ^2.3.5
-  retrofit_generator: ^6.0.0+1
+  build_runner: ^2.4.11
+  flutter_gen_runner: ^5.5.0+1
+  json_serializable: ^6.8.0
+  freezed: ^2.5.3
+  retrofit_generator: ^8.1.0
   # 一键生成启动图标: flutter pub run flutter_launcher_icons
   flutter_launcher_icons: ^0.13.1
     """,
