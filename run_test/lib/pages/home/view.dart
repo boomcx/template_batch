@@ -16,7 +16,7 @@ class HomeView extends GetView<HomeController> {
           children: [
             Obx(
               () => Text(
-                'HomeView is connected state: ${controller.isConnected}',
+                'HomeView is connected state: ${controller.connectivityResult}',
                 style: const TextStyle(fontSize: 20),
               ),
             ),

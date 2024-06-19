@@ -9,5 +9,5 @@ class HomeController extends GetxController {
 
 
   /// 是否建立网络连接
-  var isConnected = AppService.to.isConnected;
+  var connectivityResult = AppService.to.connectivityResult;
 }

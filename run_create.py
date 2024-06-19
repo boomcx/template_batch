@@ -216,7 +216,7 @@ modfy_file(
   build_runner: ^2.4.11
   flutter_gen_runner: ^5.5.0+1
   json_serializable: ^6.8.0
-  freezed: ^2.5.3
+  freezed: ^2.5.2
   retrofit_generator: ^8.1.0
   # 一键生成启动图标: flutter pub run flutter_launcher_icons
   flutter_launcher_icons: ^0.13.1
