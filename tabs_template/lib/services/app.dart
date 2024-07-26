@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:get/get.dart';
@@ -18,14 +15,6 @@ class AppService extends GetxService {
   /// 获取设备的唯一编码
   SystemDevice device = SystemDevice();
 
-  /// 网络连接状态
-  var connectivityResult = <ConnectivityResult>[].obs;
-  StreamSubscription<List<ConnectivityResult>>? _subscription;
-
-  /// 是否建立网络连接
-  bool get isConnected =>
-      !connectivityResult.value.contains(ConnectivityResult.none);
-
   @override
   void onInit() async {
     super.onInit();
@@ -34,15 +23,7 @@ class AppService extends GetxService {
   }
 
   /// 网络连接
-  initConnectivity() async {
-    connectivityResult.value = await (Connectivity().checkConnectivity());
-    _subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((List<ConnectivityResult> result) {
-      // Received changes in available connectivity types!
-      connectivityResult.value = result;
-    });
-  }
+  initConnectivity() async {}
 
   /// 初始化设备信息
   initDeviceInfo() async {
@@ -65,12 +46,6 @@ class AppService extends GetxService {
     }
 
     // print(device.toString());
-  }
-
-  @override
-  void onClose() {
-    _subscription?.cancel();
-    super.onClose();
   }
 }
 

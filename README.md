@@ -8,12 +8,12 @@
 - 基础图片资源的重复导入；
 - 或者其他；
 
-上述问题相信看到这里的小伙伴多少有点感同身受吧。博主一直想写一个自用模板项目的脚本，但苦于对文件生成脚本生疏（主要还是太懒 (￣▽￣)"），一直没有实现这个伟大的抱负，直到遇见了她 [# batch: flutter插件工程模版的创建](https://blog.csdn.net/csfchh/article/details/115033798)，好嘛，该我（~~依~~）大（~~葫~~）显（~~芦~~）身（~~画~~）手（~~瓢~~）的时候到了！！！
+上述问题相信看到这里的小伙伴多少有点感同身受吧。博主一直想写一个自用模版项目的脚本，但苦于对文件生成脚本生疏（主要还是太懒 (￣▽￣)"），一直没有实现这个伟大的抱负，直到遇见了她 [# batch: flutter插件工程模版的创建](https://blog.csdn.net/csfchh/article/details/115033798)，好嘛，该我（~~依~~）大（~~葫~~）显（~~芦~~）身（~~画~~）手（~~瓢~~）的时候到了！！！
 
 ### 正文
 我们先抛开文件的创建，文件内容的填充或者整体文件夹的复制，这些实际脚本操作是如何实现的。优先梳理一下对于我们想要生成的最终产物，需要得到些什么需要做什么。
 
-这里针对我自己的模板项目 [template_getx](https://github.com/boomcx/template_getx) 而言
+这里针对我自己的模版项目 [template_getx](https://github.com/boomcx/template_getx) 而言
 
 - 首先我们需要创建基础的项目结构`flutter create xxx ...`；
 - 然后再往创建的结构中添加下列内容（添加顺序随意）:
@@ -25,13 +25,13 @@
 - 完成添加后执行相应的`flutter`命令；
 - 最后得到完整的项目
 
-最终得到的产物是一个可直接运行，带tabbar的模板项目。
+最终得到的产物是一个可直接运行，带tabbar的模版项目。
 
 ![GIF 2023-6-25 18-04-25.gif](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0ebbbac887324de99154949a7a9aafe0~tplv-k3u1fbpfcp-watermark.image?)
 > 1、使用脚本的过程
 
 ![企业微信截图_16876875851911.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0a3b96cde63c41d3954e26cb99409446~tplv-k3u1fbpfcp-watermark.image?)
-> 2、生成的模板项目结构
+> 2、生成的模版项目结构
 
 下面开始具体说说`batch`的实现，因为不熟悉batch的所有命令，所以这里只对使用到的阐述一下（ (￣▽￣)"，其他使用可以谷歌、可以ChatGPT）。
 
@@ -121,9 +121,9 @@ if errorlevel 1 (
 )
 del temp.bat
 ```
-这里主要是创建基本的项目结构，方便后续修改为自己的项目模板。 `flutter create --platforms=ios,android --org %projectOrg% --pub %projectName%`该命令可以拼接其他的操作，输入需要用书输入则可以提供终端输入变量的模式。
+这里主要是创建基本的项目结构，方便后续修改为自己的项目模版。 `flutter create --platforms=ios,android --org %projectOrg% --pub %projectName%`该命令可以拼接其他的操作，输入需要用书输入则可以提供终端输入变量的模式。
 
-#### 6、插入模板项目的文件（夹）
+#### 6、插入模版项目的文件（夹）
 
 ```bat
 :createFolders
@@ -290,8 +290,8 @@ goto :eof
 使用ChatGPT附图：
 ![企业微信截图_16877458436465.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/418651b64a664cd89f5b83ca468c8515~tplv-k3u1fbpfcp-watermark.image?)
 
-Git地址：[flutter模板项目命令](https://github.com/boomcx/template_batch)
+Git地址：[flutter模版项目命令](https://github.com/boomcx/template_batch)
 
 bat使用推荐：[BAT 批处理 常用命令 [MD]](https://www.cnblogs.com/baiqiantao/p/11274817.html#md)
 
-模板项目产出灵感：[flutter插件工程模版的创建](https://blog.csdn.net/csfchh/article/details/115033798)
+模版项目产出灵感：[flutter插件工程模版的创建](https://blog.csdn.net/csfchh/article/details/115033798)

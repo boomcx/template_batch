@@ -15,9 +15,9 @@ class HomeView extends GetView<HomeController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Obx(
-              () => Text(
-                'HomeView is connected state: ${controller.connectivityResult}',
-                style: const TextStyle(fontSize: 20),
+              () => const Text(
+                'HomeView',
+                style:  TextStyle(fontSize: 20),
               ),
             ),
             Text(

@@ -2,14 +2,11 @@
 
 import os
 import shutil
-import code
-import sys
-
 
 print(
     """
 
-欢迎使用 Flutter 项目快速创建脚本！
+Flutter 项目创建脚本！
  _                           _         _                         _         
 | |                         | |       | |                       | |        
 | |_  ___  _ __ ___   _ __  | |  __ _ | |_  ___      __ _   ___ | |_ __  __
@@ -109,7 +106,7 @@ if not os.path.exists(project_path):
 project_type = get_project_type(
     f"""请选择项目目录结构：
 1. 单页面模版
-2. tabs结构模板
+2. tabs结构模版
 """
 )
 
