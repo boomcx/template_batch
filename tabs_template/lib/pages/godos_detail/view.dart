@@ -20,7 +20,7 @@ class GodosDetailView extends GetView<GodosDetailController> {
                 'id': controller.title.toString(),
               });
             } else {
-              TabbarController.to.jumpToTab(TabbarType.mine);
+              TabbarController.to.switchTo(TabbarType.mine);
             }
           },
           child: Text(

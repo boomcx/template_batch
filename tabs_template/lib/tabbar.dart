@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'app.dart';
-import 'service.dart';
 
 import './pages/message/message.dart';
 import '/pages/home/home.dart';
 import '/pages/mine/mine.dart';
-import 'widgets/common/redirect_bottom_bar.dart';
 
 enum TabbarType {
   home,
@@ -45,12 +43,12 @@ enum TabbarType {
 class TabbarController extends GetxController {
   static TabbarController get to => Get.find();
 
-  final persistent = PersistentTabController();
+  var tabCur = TabbarType.home.obs;
 
   /// 指定切换到根路径
-  void jumpToTab([TabbarType type = TabbarType.home]) {
+  void switchTo([TabbarType tab = TabbarType.home]) {
     Get.offAllNamed(kRouteTabbar);
-    persistent.jumpToTab(TabbarType.values.indexOf(type));
+    tabCur.value = tab;
   }
 }
 
@@ -59,54 +57,75 @@ class TabbarScaffold extends GetView<TabbarController> {
 
   @override
   Widget build(BuildContext context) {
-    return PersistentTabView(
-      controller: controller.persistent,
-      screenTransitionAnimation: const ScreenTransitionAnimation.none(),
-      tabs: TabbarType.values
-          .map(
-            (e) => PersistentTabConfig(
-              screen: e.body,
-              item: ItemConfig(
-                icon: _assets('${e.icon}_slt'),
-                inactiveIcon: _assets('${e.icon}_nor'),
-                title: e.title,
-                activeForegroundColor: Colors.blue,
-                inactiveForegroundColor: Colors.grey,
-              ),
-            ),
-          )
-          .toList(),
-      navBarBuilder: (navBarConfig) {
-        return RedirectBottomNavBar(
-          navBarConfig: navBarConfig,
-          onRedirected: (index) async {
-            if (index == TabbarType.values.length - 1 &&
-                !UserService.to.isLogined) {
-              Get.dialog(AlertDialog(
-                title: const Text('鉴权拦截处理'),
-                content: const Text('点击按钮模拟登录操作，进入`个人中心`'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      UserService.to.login();
-                      Get.back();
-                      controller.persistent.jumpToTab(index);
-                    },
-                    child: const Text('登录'),
-                  )
-                ],
-              ));
-              return true;
-            }
-            return null;
+    return Obx(
+      () => Scaffold(
+        resizeToAvoidBottomInset: false,
+        extendBody: true,
+        body: controller.tabCur.value.body,
+        bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+          itemCount: TabbarType.values.length,
+          tabBuilder: (index, isActive) {
+            final item = TabbarType.values[index];
+            return Center(child: _assets(item.name + (isActive ? '_s' : '')));
           },
-          navBarDecoration: const NavBarDecoration(
-            color: Colors.white,
-            // borderRadius: BorderRadius.circular(2),
-          ),
-        );
-      },
+          backgroundColor: Colors.white,
+          gapLocation: GapLocation.none,
+          activeIndex: controller.tabCur.value.index,
+          onTap: (index) {
+            controller.tabCur.value = TabbarType.values[index];
+          },
+        ),
+      ),
     );
+
+    // return PersistentTabView(
+    //   controller: controller.persistent,
+    //   screenTransitionAnimation: const ScreenTransitionAnimation.none(),
+    //   tabs: TabbarType.values
+    //       .map(
+    //         (e) => PersistentTabConfig(
+    //           screen: e.body,
+    //           item: ItemConfig(
+    //             icon: _assets('${e.icon}_slt'),
+    //             inactiveIcon: _assets('${e.icon}_nor'),
+    //             title: e.title,
+    //             activeForegroundColor: Colors.blue,
+    //             inactiveForegroundColor: Colors.grey,
+    //           ),
+    //         ),
+    //       )
+    //       .toList(),
+    //   navBarBuilder: (navBarConfig) {
+    //     return RedirectBottomNavBar(
+    //       navBarConfig: navBarConfig,
+    //       onRedirected: (index) async {
+    //         if (index == TabbarType.values.length - 1 &&
+    //             !UserService.to.isLogined) {
+    //           Get.dialog(AlertDialog(
+    //             title: const Text('鉴权拦截处理'),
+    //             content: const Text('点击按钮模拟登录操作，进入`个人中心`'),
+    //             actions: [
+    //               TextButton(
+    //                 onPressed: () {
+    //                   UserService.to.login();
+    //                   Get.back();
+    //                   controller.persistent.jumpToTab(index);
+    //                 },
+    //                 child: const Text('登录'),
+    //               )
+    //             ],
+    //           ));
+    //           return true;
+    //         }
+    //         return null;
+    //       },
+    //       navBarDecoration: const NavBarDecoration(
+    //         color: Colors.white,
+    //         // borderRadius: BorderRadius.circular(2),
+    //       ),
+    //     );
+    //   },
+    // );
   }
 }
 
