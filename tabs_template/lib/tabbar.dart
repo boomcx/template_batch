@@ -25,7 +25,7 @@ enum TabbarType {
   }
 
   String get icon {
-    return 'home';
+    return 'ic_home';
   }
 
   Widget get body {
@@ -66,7 +66,8 @@ class TabbarScaffold extends GetView<TabbarController> {
           itemCount: TabbarType.values.length,
           tabBuilder: (index, isActive) {
             final item = TabbarType.values[index];
-            return Center(child: _assets(item.name + (isActive ? '_s' : '')));
+            return Center(
+                child: _assets(item.icon + (isActive ? '_slt' : '_nor')));
           },
           backgroundColor: Colors.white,
           gapLocation: GapLocation.none,
@@ -130,7 +131,7 @@ class TabbarScaffold extends GetView<TabbarController> {
 }
 
 Widget _assets(String name) =>
-    Image.asset('assets/images/ic_$name.png', width: 26, height: 26);
+    Image.asset('assets/images/$name.png', width: 26, height: 26);
 
 /// 独立到每个页面，用脚本生成对应的路由名称
 /// 路由名称

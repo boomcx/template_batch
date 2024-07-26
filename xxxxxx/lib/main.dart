@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -26,7 +24,7 @@ _initAsync() async {
   await _initStorage();
   await ScreenUtil.ensureScreenSize();
 
-  if (Platform.isAndroid) {
+  if (GetPlatform.isAndroid) {
     SystemUiOverlayStyle style = const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
 

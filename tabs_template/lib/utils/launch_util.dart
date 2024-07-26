@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -73,7 +71,7 @@ class LaunchUtil {
   /// 高德地图
   static Future gotoAMap(longitude, latitude) async {
     var url =
-        '${Platform.isAndroid ? 'android' : 'ios'}amap://navi?sourceApplication=支付公园&lat=$latitude&lon=$longitude&dev=0&style=2';
+        '${GetPlatform.isAndroid ? 'android' : 'ios'}amap://navi?sourceApplication=支付公园&lat=$latitude&lon=$longitude&dev=0&style=2';
     final Uri launchUri = Uri.parse(url);
     if (await canLaunchUrl(launchUri)) {
       await launchUrl(launchUri);

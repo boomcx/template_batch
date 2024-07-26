@@ -14,11 +14,9 @@ class HomeView extends GetView<HomeController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Obx(
-              () => const Text(
-                'HomeView',
-                style:  TextStyle(fontSize: 20),
-              ),
+            const Text(
+              'HomeView',
+              style: TextStyle(fontSize: 20),
             ),
             Text(
               'HomeView is working ${controller.count}',
