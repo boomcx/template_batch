@@ -27,6 +27,8 @@ class AppPages {
       name: kRouteThemeChange,
       page: () => const ThemeChangeView(),
       binding: ThemeChangeBinding(),
+      preventDuplicates: false,
+      preventDuplicateHandlingMode: PreventDuplicateHandlingMode.recreate,
     ),
   ];
 }

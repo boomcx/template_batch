@@ -40,7 +40,8 @@ dependencies:
     sdk: flutter
 
   # 状态管理库
-  get: ^5.0.0-release-candidate-6
+  # get: ^5.0.0-release-candidate-6
+  get: ^5.0.0-release-candidate-9.2
 
   # 路由管理
   # go_router: ^13.2.2

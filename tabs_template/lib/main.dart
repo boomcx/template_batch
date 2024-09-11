@@ -80,9 +80,8 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       getPages: AppPages.routes,
       // unknownRoute: AppPages.unknownRoute,
       // scrollBehavior: CustomScrollBehavior(),
-      defaultTransition: GetPlatform.isMobile
-          ? Transition.rightToLeftWithFade
-          : Transition.fadeIn,
+      defaultTransition:
+          GetPlatform.isMobile ? Transition.rightToLeft : Transition.fadeIn,
       routingCallback: (value) {
         // 切换页面清空当前 Toast
         Toast.hideLoading();
