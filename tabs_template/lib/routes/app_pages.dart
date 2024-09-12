@@ -1,5 +1,10 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+import '../widgets/common/toast.dart';
 import '/pages/godos_detail/godos_detail.dart';
 import '/pages/mine/theme_change/theme_change.dart';
 import '/tabbar.dart';
@@ -17,6 +22,10 @@ class AppPages {
       transition: Transition.noTransition,
       page: () => const TabbarScaffold(),
       binding: TabbarBinding(),
+      canPop: false,
+      onPopInvoked: (didPop, result) {
+        AppHandler.instance.esc();
+      },
     ),
     GetPage(
       name: kRouteGodosDetail,
@@ -31,4 +40,29 @@ class AppPages {
       preventDuplicateHandlingMode: PreventDuplicateHandlingMode.recreate,
     ),
   ];
+}
+
+/// 双击退出应用
+class AppHandler {
+  AppHandler._();
+  static final instance = AppHandler._();
+
+  Timer? timer;
+  bool isQuit = false;
+
+  /// 退出应用程序
+  esc() async {
+    if (isQuit) {
+      // exit(0);
+      await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+    } else {
+      showMessage('再次操作退出App');
+      isQuit = true;
+      timer = Timer(const Duration(seconds: 2), () {
+        isQuit = false;
+        timer?.cancel();
+        timer = null;
+      });
+    }
+  }
 }
