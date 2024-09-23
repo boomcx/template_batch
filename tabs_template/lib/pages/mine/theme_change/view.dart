@@ -1,13 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:tabs_template/app.dart';
-import 'package:tabs_template/main.dart';
 
 import '../../../support_files/theme.dart';
-import 'controller.dart';
 import 'theme_change.dart';
 
 class ThemeChangeView extends GetView<ThemeChangeController> {

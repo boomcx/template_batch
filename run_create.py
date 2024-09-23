@@ -79,10 +79,24 @@ def modfy_file(file, old_str, new_str):
     with open(file, "r", encoding="utf-8") as f:
         for line in f:
             if old_str in line:
-                line = line.replace(old_str, new_str)
+                # remove_line(file, line)
+                line = new_str
+                # line = line.replace(old_str, new_str)
             file_data += line
     with open(file, "w", encoding="utf-8") as f:
         f.write(file_data)
+
+
+# def remove_line(file_name, line_to_skip):
+#     """
+#     删除指定行
+#     """
+#     with open(file_name, "r", encoding="utf-8") as read_file:
+#         lines = read_file.readlines()
+#     with open(file_name, "w", encoding="utf-8") as write_file:
+#         for current_line, line in enumerate(lines, start=1):
+#             if current_line != line_to_skip:
+#                 write_file.write(line)
 
 
 # 当前脚本文件路径
@@ -138,9 +152,9 @@ pubspec = f"{project_path}/{project_name}/pubspec.yaml"
 # dependencies
 modfy_file(
     pubspec,
-    "cupertino_icons: ^1.0.6",
+    "cupertino_icons:",
     """ 
-  cupertino_icons: ^1.0.6
+  cupertino_icons: ^1.0.8
 
   flutter_localizations:
     sdk: flutter
@@ -150,7 +164,7 @@ modfy_file(
 
   # 路由管理
   # go_router: ^13.2.2
-  persistent_bottom_nav_bar_v2: ^5.1.0
+  animated_bottom_navigation_bar: ^1.3.3
 
   # json 解析注解
   json_annotation: ^4.9.0
@@ -225,9 +239,9 @@ modfy_file(
 # dev_dependencies
 modfy_file(
     pubspec,
-    "flutter_lints: ^3.0.0",
+    "flutter_lints:",
     """
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
   build_runner: ^2.4.11
   flutter_gen_runner: ^5.5.0+1
   json_serializable: ^6.8.0
