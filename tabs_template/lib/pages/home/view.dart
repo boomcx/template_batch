@@ -29,6 +29,25 @@ class HomeView extends GetView<HomeController> {
                 });
               },
               child: const Text('news detail'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  final data = await NetRepository.client.videoList(1, 10);
+                  showMessage('请求成功');
+                } catch (e) {}
+              },
+              child: const Text('successful request'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                try {
+                  await NetRepository.client.logout();
+                } catch (e) {
+                  // showMessage('接口异常: $e');
+                }
+              },
+              child: const Text('failed request'),
             )
           ],
         ),

@@ -11,7 +11,7 @@ _$PagingIndexImpl<T> _$$PagingIndexImplFromJson<T>(
   T Function(Object? json) fromJsonT,
 ) =>
     _$PagingIndexImpl<T>(
-      total: json['total'] as int? ?? 0,
+      total: (json['total'] as num?)?.toInt() ?? 0,
       list:
           (json['list'] as List<dynamic>?)?.map(fromJsonT).toList() ?? const [],
     );

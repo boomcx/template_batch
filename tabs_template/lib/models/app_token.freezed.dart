@@ -22,8 +22,12 @@ AppToken _$AppTokenFromJson(Map<String, dynamic> json) {
 mixin _$AppToken {
   String get token => throw _privateConstructorUsedError;
 
+  /// Serializes this AppToken to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AppToken
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AppTokenCopyWith<AppToken> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -46,6 +50,8 @@ class _$AppTokenCopyWithImpl<$Res, $Val extends AppToken>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AppToken
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -79,6 +85,8 @@ class __$$AppTokenImplCopyWithImpl<$Res>
       _$AppTokenImpl _value, $Res Function(_$AppTokenImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AppToken
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -118,11 +126,13 @@ class _$AppTokenImpl implements _AppToken {
             (identical(other.token, token) || other.token == token));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, token);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AppToken
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AppTokenImplCopyWith<_$AppTokenImpl> get copyWith =>
@@ -144,8 +154,214 @@ abstract class _AppToken implements AppToken {
 
   @override
   String get token;
+
+  /// Create a copy of AppToken
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AppTokenImplCopyWith<_$AppTokenImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+BaseResponse _$BaseResponseFromJson(Map<String, dynamic> json) {
+  return _BaseResponse.fromJson(json);
+}
+
+/// @nodoc
+mixin _$BaseResponse {
+  @JsonKey(name: 'code')
+  int? get code => throw _privateConstructorUsedError;
+  @JsonKey(name: 'message')
+  String? get message => throw _privateConstructorUsedError;
+  @JsonKey(name: 'result')
+  dynamic get data => throw _privateConstructorUsedError;
+
+  /// Serializes this BaseResponse to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of BaseResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $BaseResponseCopyWith<BaseResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BaseResponseCopyWith<$Res> {
+  factory $BaseResponseCopyWith(
+          BaseResponse value, $Res Function(BaseResponse) then) =
+      _$BaseResponseCopyWithImpl<$Res, BaseResponse>;
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'code') int? code,
+      @JsonKey(name: 'message') String? message,
+      @JsonKey(name: 'result') dynamic data});
+}
+
+/// @nodoc
+class _$BaseResponseCopyWithImpl<$Res, $Val extends BaseResponse>
+    implements $BaseResponseCopyWith<$Res> {
+  _$BaseResponseCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of BaseResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? code = freezed,
+    Object? message = freezed,
+    Object? data = freezed,
+  }) {
+    return _then(_value.copyWith(
+      code: freezed == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as int?,
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$BaseResponseImplCopyWith<$Res>
+    implements $BaseResponseCopyWith<$Res> {
+  factory _$$BaseResponseImplCopyWith(
+          _$BaseResponseImpl value, $Res Function(_$BaseResponseImpl) then) =
+      __$$BaseResponseImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {@JsonKey(name: 'code') int? code,
+      @JsonKey(name: 'message') String? message,
+      @JsonKey(name: 'result') dynamic data});
+}
+
+/// @nodoc
+class __$$BaseResponseImplCopyWithImpl<$Res>
+    extends _$BaseResponseCopyWithImpl<$Res, _$BaseResponseImpl>
+    implements _$$BaseResponseImplCopyWith<$Res> {
+  __$$BaseResponseImplCopyWithImpl(
+      _$BaseResponseImpl _value, $Res Function(_$BaseResponseImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of BaseResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? code = freezed,
+    Object? message = freezed,
+    Object? data = freezed,
+  }) {
+    return _then(_$BaseResponseImpl(
+      code: freezed == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as int?,
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$BaseResponseImpl implements _BaseResponse {
+  const _$BaseResponseImpl(
+      {@JsonKey(name: 'code') this.code,
+      @JsonKey(name: 'message') this.message,
+      @JsonKey(name: 'result') this.data});
+
+  factory _$BaseResponseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BaseResponseImplFromJson(json);
+
+  @override
+  @JsonKey(name: 'code')
+  final int? code;
+  @override
+  @JsonKey(name: 'message')
+  final String? message;
+  @override
+  @JsonKey(name: 'result')
+  final dynamic data;
+
+  @override
+  String toString() {
+    return 'BaseResponse(code: $code, message: $message, data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$BaseResponseImpl &&
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.message, message) || other.message == message) &&
+            const DeepCollectionEquality().equals(other.data, data));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, code, message, const DeepCollectionEquality().hash(data));
+
+  /// Create a copy of BaseResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$BaseResponseImplCopyWith<_$BaseResponseImpl> get copyWith =>
+      __$$BaseResponseImplCopyWithImpl<_$BaseResponseImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$BaseResponseImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _BaseResponse implements BaseResponse {
+  const factory _BaseResponse(
+      {@JsonKey(name: 'code') final int? code,
+      @JsonKey(name: 'message') final String? message,
+      @JsonKey(name: 'result') final dynamic data}) = _$BaseResponseImpl;
+
+  factory _BaseResponse.fromJson(Map<String, dynamic> json) =
+      _$BaseResponseImpl.fromJson;
+
+  @override
+  @JsonKey(name: 'code')
+  int? get code;
+  @override
+  @JsonKey(name: 'message')
+  String? get message;
+  @override
+  @JsonKey(name: 'result')
+  dynamic get data;
+
+  /// Create a copy of BaseResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$BaseResponseImplCopyWith<_$BaseResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

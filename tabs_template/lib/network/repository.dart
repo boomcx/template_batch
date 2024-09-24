@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../widgets/common/toast.dart';
 import 'api_client.dart';
@@ -19,11 +20,11 @@ class NetRepository {
   static ApiClient client = ApiClient(
     Dio(BaseOptions())
       ..interceptors.addAll([
-        LogInterceptor(
-          requestBody: true,
-          responseBody: true,
-        ),
         NetInterceptor(),
+        PrettyDioLogger(
+          requestHeader: true,
+          requestBody: true,
+        ),
       ]),
     baseUrl: _devDomain.host,
   );

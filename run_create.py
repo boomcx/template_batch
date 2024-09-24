@@ -220,6 +220,7 @@ modfy_file(
   extended_image: ^8.2.1
 
   # 图片保存
+  # 最新sdk可以替换插件[image_gallery_saver_plus]
   image_gallery_saver: ^2.0.3
 
   # 系统操作权限

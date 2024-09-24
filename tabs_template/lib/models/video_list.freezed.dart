@@ -30,8 +30,12 @@ mixin _$VideoList {
   @JsonAlwaysString()
   String get duration => throw _privateConstructorUsedError;
 
+  /// Serializes this VideoList to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of VideoList
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $VideoListCopyWith<VideoList> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -61,6 +65,8 @@ class _$VideoListCopyWithImpl<$Res, $Val extends VideoList>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of VideoList
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -131,6 +137,8 @@ class __$$VideoListImplCopyWithImpl<$Res>
       _$VideoListImpl _value, $Res Function(_$VideoListImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of VideoList
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -236,12 +244,14 @@ class _$VideoListImpl implements _VideoList {
                 other.duration == duration));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, id, title, userName, userPic, coverUrl, playUrl, duration);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of VideoList
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$VideoListImplCopyWith<_$VideoListImpl> get copyWith =>
@@ -284,8 +294,11 @@ abstract class _VideoList implements VideoList {
   @override
   @JsonAlwaysString()
   String get duration;
+
+  /// Create a copy of VideoList
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$VideoListImplCopyWith<_$VideoListImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
