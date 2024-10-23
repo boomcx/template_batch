@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-mixin PagingMixin<T> {
+/// 分页控制器
+///
+/// `on GetxController` 简化使用过程
+mixin PagingMixin<T> on GetxController {
   /// 初始页码
-  int _initPage = 1;
+  int initPage = 1;
 
   /// 当前页码
   int _page = 1;
@@ -24,25 +28,38 @@ mixin PagingMixin<T> {
   /// 数据列表
   List<T> get items => _pagingController.itemList ?? [];
 
-  /// 挂载分页器
-  /// `initPage` 初始页码值(分页起始页)
-  /// `startLoading` 是否启动加载
-  void initPaging({
-    int initPage = 1,
-    bool startLoading = true,
-  }) {
-    // 重置分页器
-    if (_initPage != initPage) {
-      _initPage = initPage;
-      _pagingController.dispose();
-      _pagingController = PagingController(firstPageKey: initPage);
-    }
-
+  /// on GetxController 简化使用过程
+  ///
+  /// 也可以指定其他数据包含生命周期函数的类别，eg `State<T extends StatefulWidget> `
+  @override
+  void onInit() {
+    super.onInit();
+    _pagingController = PagingController(firstPageKey: initPage);
     _pagingController.addPageRequestListener((pageKey) {
       _page = pageKey;
       fecthData(pageKey);
     });
   }
+
+  /// 挂载分页器
+  /// `initPage` 初始页码值(分页起始页)
+  /// `startLoading` 是否启动加载
+  // void initPaging({
+  //   int initPage = 1,
+  //   bool startLoading = true,
+  // }) {
+  //   // 重置分页器
+  //   if (_initPage != initPage) {
+  //     _initPage = initPage;
+  //     _pagingController.dispose();
+  //     _pagingController = PagingController(firstPageKey: initPage);
+  //   }
+
+  //   _pagingController.addPageRequestListener((pageKey) {
+  //     _page = pageKey;
+  //     fecthData(pageKey);
+  //   });
+  // }
 
   /// 获取数据
   FutureOr fecthData(int page);
@@ -50,7 +67,7 @@ mixin PagingMixin<T> {
   /// 刷新数据
   Future onRefresh() async {
     _refreshComplater = Completer();
-    _pagingController.notifyPageRequestListeners(_initPage);
+    _pagingController.notifyPageRequestListeners(initPage);
 
     // 会触发首次加载
     // _pagingController.refresh();
@@ -74,7 +91,7 @@ mixin PagingMixin<T> {
     dynamic error,
     // int insertPrevious = 0,
   }) {
-    if (_page == _initPage) {
+    if (_page == initPage) {
       _refreshComplater?.complete();
       _refreshComplater = null;
     }
@@ -83,7 +100,7 @@ mixin PagingMixin<T> {
       bool hasNoMore = true;
 
       // 刷新清空历史数据列表
-      if (_page == _initPage && this.items.isNotEmpty) {
+      if (_page == initPage && this.items.isNotEmpty) {
         updateItems([]);
       }
 
