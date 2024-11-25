@@ -160,7 +160,8 @@ modfy_file(
     sdk: flutter
 
   # 状态管理库
-  get: ^5.0.0-release-candidate-6
+  # get: ^5.0.0-release-candidate-6
+  get: ^5.0.0-release-candidate-9.2
 
   # 路由管理
   # go_router: ^13.2.2
@@ -186,6 +187,9 @@ modfy_file(
 
   # 滚动加载更多
   infinite_scroll_pagination: ^4.0.0
+
+  # 网络请求日志
+  pretty_dio_logger: ^1.4.0
 
   # 网络请求
   dio: ^5.4.3+1
@@ -217,10 +221,10 @@ modfy_file(
   path_provider: ^2.1.3
 
   # 图片
+  # 最新sdk可以替换插件[image_gallery_saver_plus]
   extended_image: ^8.2.1
 
   # 图片保存
-  # 最新sdk可以替换插件[image_gallery_saver_plus]
   image_gallery_saver: ^2.0.3
 
   # 系统操作权限
@@ -243,13 +247,13 @@ modfy_file(
     "flutter_lints:",
     """
   flutter_lints: ^4.0.0
-  build_runner: ^2.4.11
-  flutter_gen_runner: ^5.5.0+1
+  build_runner: ^2.4.12
+  flutter_gen_runner: ^5.7.0
   json_serializable: ^6.8.0
-  freezed: ^2.5.2
-  retrofit_generator: ^8.1.0
-  # 一键生成启动图标: flutter pub run flutter_launcher_icons
-  flutter_launcher_icons: ^0.13.1
+  freezed: ^2.5.7
+  retrofit_generator: ^9.1.2
+  # 一键生成启动图标: dart pub run flutter_launcher_icons
+  flutter_launcher_icons: ^0.14.0
     """,
 )
 
