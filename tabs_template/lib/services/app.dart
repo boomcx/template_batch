@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:get/get.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 /// `event_bus`通知挂载
 class AppNeedToLogin {}
@@ -15,6 +18,17 @@ class AppService extends GetxService {
   /// 获取设备的唯一编码
   SystemDevice device = SystemDevice();
 
+  /// 连接次数
+  int connectedTimes = 0;
+  var isConnected = true.obs;
+  Future<bool> get connectedStatus async {
+    isConnected.value = true;
+    return InternetConnection().hasInternetAccess;
+  }
+
+  /// 网络监听
+  StreamSubscription<InternetStatus>? listener;
+
   @override
   void onInit() async {
     super.onInit();
@@ -23,7 +37,20 @@ class AppService extends GetxService {
   }
 
   /// 网络连接
-  initConnectivity() async {}
+  initConnectivity() async {
+    listener =
+        InternetConnection().onStatusChange.listen((InternetStatus status) {
+      switch (status) {
+        case InternetStatus.connected:
+          isConnected.value = true;
+          connectedTimes++;
+          break;
+        case InternetStatus.disconnected:
+          isConnected.value = false;
+          break;
+      }
+    });
+  }
 
   /// 初始化设备信息
   initDeviceInfo() async {

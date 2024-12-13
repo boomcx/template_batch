@@ -39,85 +39,35 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  # 状态管理库
   # get: ^5.0.0-release-candidate-6
   get: ^5.0.0-release-candidate-9.2
-
-  # 路由管理
-  # go_router: ^13.2.2
   animated_bottom_navigation_bar: ^1.3.3
-
-  # json 解析注解
   json_annotation: ^4.9.0
-
-  # frezzed 注解
   freezed_annotation: ^2.4.1
-
-  # 快捷状态处理
-  flutter_hooks: ^0.20.3
-
-  # 本地缓存
   get_storage: ^2.1.1
-
-  # 消息吐司
   bot_toast: ^4.1.3
-
-  # 刷新
   easy_refresh: ^3.4.0
-
-  # 滚动加载更多
   infinite_scroll_pagination: ^4.0.0
-
-  # 网络请求
   dio: ^5.4.3+1
-
-  # 网络请求注解
   retrofit: ^4.1.0
-
-  # 像素适配
   flutter_screenutil: ^5.9.3
-
-  # 加载动画
   flutter_spinkit: ^5.2.1
-
-  # 快速构建animation builder
   simple_animations: ^5.0.2
-  # cached_network_image: ^3.2.2
-
   event_bus: ^2.0.0
-
-  # 相册 / 相机
   photo_view: ^0.15.0
   wechat_assets_picker: ^9.0.4
   wechat_camera_picker: ^4.2.2
-
-  # 启动图: flutter pub run flutter_native_splash:create
   flutter_native_splash: ^2.4.0
-
-  # 文件路径
   path_provider: ^2.1.3
-
-  # 图片
-  # 最新sdk可以替换插件[image_gallery_saver_plus]
+  # cached_network_image: ^3.2.2
   extended_image: ^8.2.1
-
-  # 图片保存
   image_gallery_saver: ^2.0.3
-
-  # 系统操作权限
   permission_handler: ^11.3.1
-
-  # App包信息
   package_info_plus: ^8.0.0
-
-  # 设备信息
   device_info_plus: ^10.1.0
-
-  # 打开url
   url_launcher: ^6.3.0
+  internet_connection_checker_plus: ^2.5.2
 
-  # request log
-  pretty_dio_logger: ^1.4.0
 
 
 dev_dependencies:
@@ -138,6 +88,8 @@ dev_dependencies:
   retrofit_generator: ^8.1.0
   # 一键生成启动图标: flutter pub run flutter_launcher_icons
   flutter_launcher_icons: ^0.13.1
+  pretty_dio_logger: ^1.4.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

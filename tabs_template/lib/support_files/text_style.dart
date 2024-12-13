@@ -4,6 +4,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore_for_file: non_constant_identifier_names
 
+extension ColorHexExt on String {
+  static Color fromHex(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
+
+  Color get toColor => fromHex(this);
+}
+
 /// 根据主题配置，设置字体风格
 ///
 /// 通过颜色`Color`获取普通字体大小的`TextStyle`

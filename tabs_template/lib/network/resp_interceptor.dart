@@ -1,30 +1,21 @@
-import 'package:flutter/foundation.dart';
-
 import 'package:dio/dio.dart';
 
-import '../app.dart';
 import '../models/app_token.dart';
-import '../service.dart';
+import '../widgets/common/toast.dart';
 
-/// 请求拦截相关的处理
-class NetInterceptor extends Interceptor {
-  NetInterceptor();
-
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // 公共参数
-    options.headers['xxxxx'] = 'xxxxx';
-
-    handler.next(options);
-  }
-
+/// 请求结果拦截相关的处理
+class ResponseDataInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
+    if (response.requestOptions.headers['hideLoading'] != false) {
+      Toast.hideLoading();
+    }
+
     // 服务器返回的数据
     BaseResponse resp = BaseResponse.fromJson(response.data);
 
-    // 请求成功，需要和自己服务器的code保持一致
-    if (resp.code == 200) {
+    // 请求成功
+    if (resp.code == 0) {
       response.data = resp.data;
       handler.next(response);
       return;
@@ -32,8 +23,7 @@ class NetInterceptor extends Interceptor {
 
     // 通用异常处理
     if (resp.code == 401) {
-      // AppService.bus.fire(AppNeedToLogin());
-      UserService.to.logout();
+      // UserService.to.logout();
       return;
     }
 
@@ -43,8 +33,17 @@ class NetInterceptor extends Interceptor {
       requestOptions: response.requestOptions,
       error: DioExceptionType.badResponse,
       // 这里debug模式输出完整的错误日志方便定位问题，线上环境直接输出错误信息
-      message: kReleaseMode ? resp.message : resp.toJson().toString(),
+      // message: kReleaseMode ? resp.message : resp.toJson().toString(),
+      message: resp.message,
     );
+    // handler.reject(
+    //   DioException(
+    //     requestOptions: response.requestOptions,
+    //     error: DioExceptionType.badResponse,
+    //     message: resp.message,
+    //   ),
+    //   false,
+    // );
   }
 
   @override
@@ -52,6 +51,8 @@ class NetInterceptor extends Interceptor {
     super.onError(err, handler);
     // final path = '${err.requestOptions.uri}';
     // 显示错误信息
-    Toast.message(err.message ?? 'request error');
+    if (err.message != null) {
+      Toast.message(err.message!);
+    }
   }
 }

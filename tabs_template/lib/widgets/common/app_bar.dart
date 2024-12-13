@@ -25,7 +25,7 @@ class AAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.isRootNavigator = false,
     this.centerTitle = true,
     this.bottom,
-    this.onWillPop,
+    this.onPopInvoked,
   });
 
   final double? leadingWidth;
@@ -41,18 +41,15 @@ class AAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool isRootNavigator;
   final bool centerTitle;
   final PreferredSize? bottom;
-  final Future<bool> Function()? onWillPop;
+  final Future<void> Function(dynamic result)? onPopInvoked;
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: onWillPop == null,
-      onPopInvoked: (didPop) async {
+      canPop: onPopInvoked == null,
+      onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
-        final res = await onWillPop?.call();
-        if (res == true) {
-          Navigator.of(context).pop();
-        }
+        await onPopInvoked?.call(result);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -125,7 +122,7 @@ class GradientAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.leadingWidth,
     this.isOverall = false,
     this.colorInt = 255,
-    this.onWillPop,
+    this.onPopInvoked,
     this.centerTitle = true,
     this.actions,
   });
@@ -145,7 +142,7 @@ class GradientAppBar extends StatefulWidget implements PreferredSizeWidget {
   final double? leadingWidth;
   final Widget? leading;
   final int colorInt;
-  final Future<bool> Function()? onWillPop;
+  final Future<void> Function(dynamic result)? onPopInvoked;
   final bool centerTitle;
   final List<Widget>? actions;
 
@@ -195,7 +192,7 @@ class _GradientAppBarState extends State<GradientAppBar> {
           leading: widget.leading,
           leadingWidth: widget.leadingWidth,
           bottom: widget.bottom,
-          onWillPop: widget.onWillPop,
+          onPopInvoked: widget.onPopInvoked,
           centerTitle: widget.centerTitle,
           actions: widget.actions,
           // systemOverlayStyle: opacity.value > 0.5
@@ -211,7 +208,7 @@ class _GradientAppBarState extends State<GradientAppBar> {
       leading: widget.leading,
       leadingWidth: widget.leadingWidth,
       bottom: widget.bottom,
-      onWillPop: widget.onWillPop,
+      onPopInvoked: widget.onPopInvoked,
       centerTitle: widget.centerTitle,
       actions: widget.actions,
 

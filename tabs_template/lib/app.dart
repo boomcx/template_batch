@@ -8,6 +8,7 @@ export 'extensions/custom_scroll_extension.dart';
 export 'package:flutter_screenutil/flutter_screenutil.dart';
 export 'package:get/get.dart' hide Response;
 export 'utils/common.dart';
+export 'widgets/common/base_view.dart';
 export 'widgets/common/app_bar.dart';
 export 'widgets/common/empty_data_view.dart';
 export 'widgets/common/gaps.dart';

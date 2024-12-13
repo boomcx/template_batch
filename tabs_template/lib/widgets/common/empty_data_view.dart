@@ -28,6 +28,7 @@ class DefaultSearchEmpty extends StatelessWidget {
   }
 }
 
+/// 默认空数据
 class DefaultEmptyDataView extends StatelessWidget {
   const DefaultEmptyDataView({
     super.key,
@@ -56,6 +57,22 @@ class DefaultEmptyDataView extends StatelessWidget {
       attachChild: attachView,
       icon: icon ?? Assets.images.icHomeNor.image(width: 160),
       onTap: onPressed,
+    );
+  }
+}
+
+/// 网络异常
+class NetworkAnomalyView extends StatelessWidget {
+  const NetworkAnomalyView({this.onTap, super.key});
+
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return EmptyDataPlaceholder(
+      text: '暂无网络',
+      icon: Assets.images.icHomeNor.image(width: 160),
+      onTap: onTap,
     );
   }
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tabs_template/app.dart';
 
-import '../../app.dart';
 import '../godos_detail/godos_detail.dart';
 import 'controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,10 +19,6 @@ class HomeView extends GetView<HomeController> {
               'HomeView',
               style: TextStyle(fontSize: 20),
             ),
-            Text(
-              'HomeView is working ${controller.count}',
-              style: const TextStyle(fontSize: 20),
-            ),
             ElevatedButton(
               onPressed: () {
                 Get.toNamed(kRouteGodosDetail, parameters: {
@@ -33,7 +30,7 @@ class HomeView extends GetView<HomeController> {
             ElevatedButton(
               onPressed: () async {
                 try {
-                  final data = await NetRepository.client.videoList(1, 10);
+                  await NetRepository.client.videoList(1, 10);
                   showMessage('请求成功');
                 } catch (e) {}
               },

@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:tabs_template/network/req_interceptor.dart';
+import 'package:tabs_template/network/resp_interceptor.dart';
 
 import '../widgets/common/toast.dart';
 import 'api_client.dart';
-import 'interceptor.dart';
 
 /// 统一处理错误信息
 void formatError(e) {
@@ -20,7 +21,8 @@ class NetRepository {
   static ApiClient client = ApiClient(
     Dio(BaseOptions())
       ..interceptors.addAll([
-        NetInterceptor(),
+        RequestDataInterceptor(),
+        ResponseDataInterceptor(),
         PrettyDioLogger(
           requestHeader: true,
           requestBody: true,
