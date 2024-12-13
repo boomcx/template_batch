@@ -197,15 +197,15 @@ modfy_file(
     "flutter_lints:",
     """
   flutter_lints: ^4.0.0
-  build_runner: ^2.4.11
-  flutter_gen_runner: ^5.5.0+1
+  build_runner: ^2.4.12
+  flutter_gen_runner: ^5.7.0
   json_serializable: ^6.8.0
-  freezed: ^2.5.2
-  retrofit_generator: ^8.1.0
-  # 一键生成启动图标: flutter pub run flutter_launcher_icons
-  flutter_launcher_icons: ^0.13.1
+  freezed: ^2.5.7
+  retrofit_generator: ^9.1.2
+  # 一键生成启动图标: dart pub run flutter_launcher_icons
+  flutter_launcher_icons: ^0.14.0
   pretty_dio_logger: ^1.4.0
-  
+
     """,
 )
 
