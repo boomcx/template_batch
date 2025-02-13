@@ -68,6 +68,7 @@ dependencies:
   url_launcher: ^6.3.0
   internet_connection_checker_plus: ^2.5.2
   flutter_page_lifecycle: ^1.1.0
+  pretty_dio_logger: ^1.4.0
 
 
 dev_dependencies:
@@ -88,7 +89,6 @@ dev_dependencies:
   retrofit_generator: ^9.1.2
   # 一键生成启动图标: dart pub run flutter_launcher_icons
   flutter_launcher_icons: ^0.14.0
-  pretty_dio_logger: ^1.4.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

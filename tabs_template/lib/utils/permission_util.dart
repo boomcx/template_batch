@@ -121,9 +121,9 @@ class PermissionUtil {
   }) async {
     bool hasPermission = await requestPermissions(
       // [Permission.camera, Permission.storage],
-      [Permission.calendar],
+      [Permission.calendarFullAccess],
       bothGranted: false,
-      message: permissionMessage[Permission.calendar],
+      message: permissionMessage[Permission.calendarFullAccess],
       // maskTitle: '日历权限说明',
       // maskContent: '便于您使用该功能拍摄照片/图片上传及用于修改头像、图片保存、意见反馈等场景。',
     );

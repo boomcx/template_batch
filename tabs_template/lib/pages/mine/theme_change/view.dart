@@ -27,7 +27,7 @@ class ThemeChangeView extends GetView<ThemeChangeController> {
           ElevatedButton(
             onPressed: () {
               Get.bottomSheet(
-                PopView(),
+                const PopView(),
               );
             },
             child: const Text('popview and pushReplace ThemeChangeView'),

@@ -166,6 +166,8 @@ abstract class BaseViewController extends GetxController {
   }
 
   /// 页面显示的回调，通过组件生命周期监听实现
+  /// 
+  /// 默认进入页面会初始执行一次，以后每次页面显示的时候也会执行（如页面没被销毁的上级页面/根页面）
   ///
   /// 通常用于请求网络，刷新数据
   Future onShowRepeatNetwork() async => null;
