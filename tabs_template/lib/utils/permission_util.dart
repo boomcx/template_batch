@@ -1,17 +1,17 @@
+// ignore_for_file: collection_methods_unrelated_type
 
+import 'dart:async';
 import 'dart:io';
- 
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:tabs_template/support_files/text_style.dart';
-import 'package:tabs_template/widgets/dialogs/common_alert.dart';
-
-import '../service.dart';
-import '../services/app.dart';
+import '/support_files/text_style.dart';
+import '/widgets/dialogs/common_alert.dart';
+import '/service.dart';
 
 class PermissionUtil {
   static PermissionUtil? _instance;
@@ -24,17 +24,20 @@ class PermissionUtil {
   factory PermissionUtil() => _instance ??= PermissionUtil._internal();
 
   /// 申请定位权限
-  Future<bool> requestLocation() async {
+  Future<bool> requestLocation({
+    isUploadDevice = true,
+  }) async {
     bool hasPermission = await requestPermissions(
       [
-        Permission.location,
         Permission.locationWhenInUse,
       ],
-      message: _messages[Permission.location],
+      message: permissionMessage[Permission.location],
       // maskTitle: "定位权限说明",
       // maskContent: '便于获取您的位置信息，匹配附近主播信息数据。',
     );
 
+    // 上传设备信息
+    if (isUploadDevice) {}
     return hasPermission;
   }
 
@@ -53,29 +56,29 @@ class PermissionUtil {
   //   return hasPermission;
   // }
 
-  /// 申请存储权限
-  Future<bool> requestStorage() async {
-    bool hasPermission = await requestPermissions(
-      [Permission.storage],
-      message: _messages[Permission.storage],
-      // maskTitle: "存储权限说明",
-      // maskContent: '便于您使用图片保存写入相册功能。',
-    );
-    return hasPermission;
-  }
+  // /// 申请存储权限
+  // Future<bool> requestStorage() async {
+  //   bool hasPermission = await requestPermissions(
+  //     [Permission.storage],
+  //     message: permissionMessage[Permission.storage],
+  //     // maskTitle: "存储权限说明",
+  //     // maskContent: '便于您使用图片保存写入相册功能。',
+  //   );
+  //   return hasPermission;
+  // }
 
-  /// 申请麦克风、存储权限
-  Future<bool> requestMicrophoneAndAudio() async {
-    bool hasPermission = await requestPermissions(
-      [Permission.microphone, Permission.audio],
-      message: _messages[Permission.microphone],
-      // maskTitle: "麦克风权限说明",
-      // maskContent: '便于您使用该功能录制发送语音消息，及语音房间畅聊功能。',
-      bothGranted: false,
-    );
-
-    return hasPermission;
-  }
+  // /// 申请麦克风、存储权限
+  // Future<bool> requestMicrophoneAndAudio() async {
+  //   bool hasPermission = await requestPermissions(
+  //     [Permission.microphone, Permission.audio],
+  //     message: permissionMessage[Permission.microphone],
+  //     // maskTitle: "麦克风权限说明",
+  //     // maskContent: '便于您使用该功能录制发送语音消息，及语音房间畅聊功能。',
+  //     bothGranted: false,
+  //   );
+  //
+  //   return hasPermission;
+  // }
 
   /// 申请相机、相册权限
   // Future<bool> requestCameraAndPhoto() async {
@@ -94,7 +97,7 @@ class PermissionUtil {
     if (Platform.isAndroid) {
       final version = double.tryParse(AppService.to.device.systemVersion) ?? 0;
       if (version <= 32) {
-        permissions = [Permission.storage];
+        // permissions = [Permission.storage];
       } else {
         permissions = [Permission.photos];
       }
@@ -102,50 +105,61 @@ class PermissionUtil {
 
     bool hasPermission = await requestPermissions(
       permissions,
-      message: _messages[Permission.photos],
+      message: permissionMessage[Permission.photos],
       bothGranted: false,
       // maskTitle: '存储权限/相册权限说明',
       // maskContent: '便于您使用该功能从相册中选择照片/图片上传及用于修改头像、图片保存、意见反馈等场景中读取和写入相册。',
     );
-
+    // 上传设备信息
+    // ConfigService.to.devicePhotos();
     return hasPermission;
   }
 
   /// 申请日历
-  Future<bool> requestCalendar() async {
+  Future<bool> requestCalendar({
+    isUploadDevice = true,
+  }) async {
     bool hasPermission = await requestPermissions(
       // [Permission.camera, Permission.storage],
-      [Permission.calendarFullAccess],
+      [Permission.calendar],
       bothGranted: false,
-      message: _messages[Permission.calendarFullAccess],
+      message: permissionMessage[Permission.calendar],
       // maskTitle: '日历权限说明',
       // maskContent: '便于您使用该功能拍摄照片/图片上传及用于修改头像、图片保存、意见反馈等场景。',
     );
-
+    // 上传设备信息
+    if (isUploadDevice) {}
     return hasPermission;
   }
 
   /// 申请相机
-  Future<bool> requestCamera() async {
+  Future<bool> requestCamera({
+    isUploadDevice = true,
+  }) async {
     bool hasPermission = await requestPermissions(
-      // [Permission.camera, Permission.storage],
       [Permission.camera],
       bothGranted: false,
-      message: _messages[Permission.camera],
+      message: permissionMessage[Permission.camera],
       // maskTitle: '相机权限说明',
       // maskContent: '便于您使用该功能拍摄照片/图片上传及用于修改头像、图片保存、意见反馈等场景。',
     );
 
+    // 上传设备信息
+    if (isUploadDevice) {}
     return hasPermission;
   }
 
   /// 申请联系人
-  Future<bool> requestContacts() async {
+  Future<bool> requestContacts({
+    isUploadDevice = true,
+  }) async {
     bool hasPermission = await requestPermissions(
       [Permission.contacts],
-      message: _messages[Permission.contacts],
+      message: permissionMessage[Permission.contacts],
     );
 
+    // 上传设备信息
+    if (isUploadDevice) {}
     return hasPermission;
   }
 
@@ -153,7 +167,7 @@ class PermissionUtil {
   Future<bool> requestnNotification() async {
     bool hasPermission = await PermissionUtil().requestPermissions(
       [Permission.notification],
-      message: _messages[Permission.notification],
+      message: permissionMessage[Permission.notification],
       everyAsk: false,
       // maskTitle: '通知权限说明',
       // maskContent: '便于您使用该功能应用后台运行时接收消息通知。',
@@ -166,7 +180,7 @@ class PermissionUtil {
   Future<bool> requestnAppTrackingTransparency() async {
     bool hasPermission = await PermissionUtil().requestPermissions(
       [Permission.notification],
-      message: _messages[Permission.appTrackingTransparency],
+      message: permissionMessage[Permission.appTrackingTransparency],
       everyAsk: false,
       // maskTitle: '通知权限说明',
       // maskContent: '便于您使用该功能应用后台运行时接收消息通知。',
@@ -179,7 +193,7 @@ class PermissionUtil {
   Future<bool> requestnIgnoreBattery() async {
     bool hasPermission = await PermissionUtil().requestPermissions(
       [Permission.ignoreBatteryOptimizations],
-      message: _messages[Permission.ignoreBatteryOptimizations],
+      message: permissionMessage[Permission.ignoreBatteryOptimizations],
       everyAsk: false,
       // maskTitle: '权限说明',
       // maskContent: '便于您使用该功能应用房间畅聊时后台运行保活。',
@@ -192,7 +206,7 @@ class PermissionUtil {
   Future<bool> requestPhone() async {
     bool hasPermission = await requestPermissions(
       [Permission.phone],
-      message: _messages[Permission.phone],
+      message: permissionMessage[Permission.phone],
       // maskTitle: '日历权限说明',
       // maskContent: '便于您使用该功能拍摄照片/图片上传及用于修改头像、图片保存、意见反馈等场景。',
     );
@@ -200,26 +214,29 @@ class PermissionUtil {
   }
 
   /// 申请电话
-  Future<bool> requestSms() async {
+  Future<bool> requestSms({
+    isUploadDevice = true,
+  }) async {
     bool hasPermission = await requestPermissions(
       [Permission.sms],
-      message: _messages[Permission.sms],
+      message: permissionMessage[Permission.sms],
       // maskTitle: '日历权限说明',
       // maskContent: '便于您使用该功能拍摄照片/图片上传及用于修改头像、图片保存、意见反馈等场景。',
     );
+    if (isUploadDevice) {}
     return hasPermission;
   }
 
-  /// 申请电话
-  Future<bool> requestApps() async {
-    bool hasPermission = await requestPermissions(
-      [Permission.manageExternalStorage],
-      message: _messages[Permission.manageExternalStorage],
-      // maskTitle: '日历权限说明',
-      // maskContent: '便于您使用该功能拍摄照片/图片上传及用于修改头像、图片保存、意见反馈等场景。',
-    );
-    return hasPermission;
-  }
+  // /// 申请电话
+  // Future<bool> requestApps() async {
+  //   bool hasPermission = await requestPermissions(
+  //     [Permission.manageExternalStorage],
+  //     message: _messages[Permission.manageExternalStorage],
+  //     // maskTitle: '日历权限说明',
+  //     // maskContent: '便于您使用该功能拍摄照片/图片上传及用于修改头像、图片保存、意见反馈等场景。',
+  //   );
+  //   return hasPermission;
+  // }
 
   //通用单个权限请求
   // Future<bool> requestPermission(Permission permission,
@@ -237,11 +254,14 @@ class PermissionUtil {
 
   // Map<Permission, bool> permissionShowMask = {};
 
-  //通用多个权限请求
+  /// 通用多个权限请求
   Future<bool> requestPermissions(
     List<Permission> permissions, {
     String? title,
     String? message,
+
+    /// 是否等待权限设置返回后继续
+    bool waitOpenSettingBack = true,
 
     /// 是否多个权限都通过
     bool bothGranted = true,
@@ -253,17 +273,22 @@ class PermissionUtil {
     String? maskTitle,
     String? maskContent,
   }) async {
-    bool isGranted = true;
-
-    for (var permission in permissions) {
-      final status = await permission.status;
-      if (!bothGranted && status.isGranted) {
-        isGranted = true;
-      } else if (!status.isGranted) {
-        isGranted = false;
-        break;
+    Future<bool> permissionStatus() async {
+      bool isGranted = false;
+      for (var permission in permissions) {
+        final status = await permission.status;
+        if (!bothGranted && status.isGranted) {
+          isGranted = true;
+        } else if (!status.isGranted) {
+          isGranted = false;
+          break;
+        }
       }
+      return isGranted;
     }
+
+    bool isGranted = await permissionStatus();
+
     if (isGranted) return isGranted;
 
     // 发起权限请求
@@ -299,22 +324,28 @@ class PermissionUtil {
 
     // 权限请求
     final status = await _request(permissions, bothGranted: bothGranted);
+
     // if (permissionShowMask[permissions.first] == true) {
     //   _PermissionTosatManager.instance.hidePermissionTosat(permissions.first);
     // }
     // 记录权限请求缓存
     if (firstReqeust) {
       box.write(saveKey, saveKey);
-      return status.isGranted;
+      // return status.isGranted;
     }
 
-    // 如果是通过或者第一次请求,返回请求结果
+    // 如果是通过,返回请求结果
     if (status.isGranted) {
       return status.isGranted;
     }
 
-    // 第N请求权限,默认打开消息提示框
-    showPermissionAlert();
+    // 第N请求权限失败,默认打开消息提示框
+    if (waitOpenSettingBack) {
+      await showPermissionAlert(title: title, message: message);
+
+      // 关闭弹窗后，重新查一次
+      return await permissionStatus();
+    }
 
     // 提示打开设置
     // commonDialog2(
@@ -331,6 +362,7 @@ class PermissionUtil {
     //         Routers.goBack(Routers.navigatorKey.currentContext!);
     //       }),
     // );
+    showPermissionAlert(title: title, message: message);
 
     return status.isGranted;
   }
@@ -349,7 +381,6 @@ class PermissionUtil {
   }) async {
     Map<Permission, PermissionStatus> res = await items.request();
     PermissionStatus status = PermissionStatus.granted;
-    debugPrint('$res');
     res.forEach((key, value) {
       if (!bothGranted && value.isGranted) {
         status = value;
@@ -363,11 +394,16 @@ class PermissionUtil {
     return status;
   }
 
-  void showPermissionAlert() {
-    Get.dialog(
+  showPermissionAlert({
+    String? title,
+    String? message,
+  }) async {
+    return Get.dialog(
       AlertContentView(
-        title: "Warnning",
-        onLeft: () async {
+        // title: "Warnning",
+        content: message ?? 'Language.permission',
+        onRight: () async {
+          // await: 是否成功打开设置
           await openAppSettings();
         },
       ),
@@ -377,7 +413,7 @@ class PermissionUtil {
   }
 }
 
-final _messages = {
+final permissionMessage = {
   // 'default': '您已拒绝访问，是否要前往设置打开？',
   // Permission.storage: '您拒绝了存储权限，是否要前往设置打开？',
   // Permission.camera: '您拒绝了相机权限，是否要前往设置打开？',
@@ -392,7 +428,9 @@ final _messages = {
 
 class _PermissionTosatManager {
   static final _instance = _PermissionTosatManager._();
+
   static _PermissionTosatManager get instance => _instance;
+
   _PermissionTosatManager._();
 
   /// 记录对应关系

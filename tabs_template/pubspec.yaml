@@ -67,6 +67,7 @@ dependencies:
   device_info_plus: ^10.1.0
   url_launcher: ^6.3.0
   internet_connection_checker_plus: ^2.5.2
+  flutter_page_lifecycle: ^1.1.0
 
 
 dev_dependencies:

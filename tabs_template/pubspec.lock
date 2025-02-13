@@ -464,6 +464,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.4.1"
+  flutter_page_lifecycle:
+    dependency: "direct main"
+    description:
+      name: flutter_page_lifecycle
+      sha256: ee09a2245c29e3bcf304748f3a81f928feaa092ba44b21a902092ecd6ba2ba49
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -1327,6 +1335,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.3.2"
+  visibility_detector:
+    dependency: transitive
+    description:
+      name: visibility_detector
+      sha256: "15c54a459ec2c17b4705450483f3d5a2858e733aee893dcee9d75fd04814940d"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.3.3"
   vm_service:
     dependency: transitive
     description:

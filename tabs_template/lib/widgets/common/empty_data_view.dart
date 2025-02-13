@@ -71,7 +71,7 @@ class NetworkAnomalyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return EmptyDataPlaceholder(
       text: '暂无网络',
-      icon: Assets.images.icHomeNor.image(width: 160),
+      icon: const Icon(Icons.wifi_off_rounded, size: 160),
       onTap: onTap,
     );
   }

@@ -11,11 +11,14 @@ class ResponseDataInterceptor extends Interceptor {
       Toast.hideLoading();
     }
 
+    // 网络畅通
+    // AppService.to.connectivity.value = true;
+
     // 服务器返回的数据
     BaseResponse resp = BaseResponse.fromJson(response.data);
 
     // 请求成功
-    if (resp.code == 0) {
+    if (resp.code == 200) {
       response.data = resp.data;
       handler.next(response);
       return;
@@ -50,8 +53,18 @@ class ResponseDataInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) {
     super.onError(err, handler);
     // final path = '${err.requestOptions.uri}';
+    hideLoading();
+
+    // final code = err.response?.data['succession'];
+
+    // 网络异常
+    // InternetConnection().hasInternetAccess.then((value) {
+    //   AppService.to.connectivity.value = value;
+    // });
+
     // 显示错误信息
-    if (err.message != null) {
+    if (err.message?.isNotEmpty == true &&
+        err.type != DioExceptionType.connectionTimeout) {
       Toast.message(err.message!);
     }
   }

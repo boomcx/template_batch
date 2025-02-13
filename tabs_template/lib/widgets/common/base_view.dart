@@ -1,6 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:tabs_template/service.dart';
+import 'dart:async';
+
+import 'package:flutter_page_lifecycle/flutter_page_lifecycle.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+
 import '/app.dart';
+import '/service.dart';
+import 'package:flutter/material.dart';
+// import 'package:lifecycle/lifecycle.dart';
 
 abstract class BaseView<T extends BaseViewController>
     extends GetView<BaseViewController> {
@@ -11,25 +17,45 @@ abstract class BaseView<T extends BaseViewController>
 
   @override
   Widget build(BuildContext context) {
-    Widget view = buildBody(context);
-    Widget body = GetBuilder(
-      id: 'base_tap_refresh_network',
-      init: controller,
-      builder: (_) {
-        return !AppService.to.isConnected.value
-            ? notConnectivityView(context)
-            : view;
-      },
-    );
-    return Scaffold(
+    final scaffold = Scaffold(
       appBar: buildAppBar(context),
       backgroundColor: buildBackgroundColor(context),
       extendBody: extendBody,
       extendBodyBehindAppBar: extendBodyBehindAppBar,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      body: body,
-      bottomNavigationBar: buildBottomNavigationBar(context),
+      // 这里生命周期和原生的`onShow`有出入，具体逻辑差异需要自己特殊处理
+      body: PageLifecycle(
+        stateChanged: (appeared) {
+          if (!appeared) {
+            return;
+          }
+          if (!controller.isOnInitRequest && controller.isShowRepeatNetwork) {
+            controller.onShowRepeatNetwork();
+          }
+        },
+        child: buildBody(context),
+      ),
+      bottomNavigationBar: Obx(
+        () {
+          return !AppService.to.connectivity.value
+              ? const SizedBox.shrink()
+              : buildBottomNavigationBar(context) ?? const SizedBox.shrink();
+        },
+      ),
     );
+
+    return Obx(() {
+      if (!AppService.to.connectivity.value) {
+        // controller.reconnectStartTimer();
+        return Scaffold(
+          body: noNetworkView(context),
+        );
+      }
+
+      // controller.reconnectStopTimer();
+
+      return scaffold;
+    });
   }
 
   bool get extendBody => false;
@@ -49,29 +75,25 @@ abstract class BaseView<T extends BaseViewController>
   Widget? buildBottomNavigationBar(BuildContext context) => null;
 
   /// 没有网络连接的展示视图
-  Widget notConnectivityView(BuildContext context) {
+  Widget noNetworkView(BuildContext context) {
     return NetworkAnomalyView(
       onTap: () async {
         try {
-          if (await AppService.to.connectedStatus) {
-            controller.onBaseRequest();
-            controller.update(['base_tap_refresh_network']);
+          AppService.to.isHideLoading = false;
+
+          showLoading();
+          await 2.delay();
+          hideLoading();
+          if (await InternetConnection().hasInternetAccess) {
+            controller.onShowRepeatNetwork();
+            AppService.to.connectivity.value = true;
+            // controller.tapRefreshCount++;
+            // controller.update(['tapRefreshCount1', 'tapRefreshCount2']);
           }
-        } catch (e) {}
+        } catch (e) {
+          hideLoading();
+        }
       },
-    );
-  }
-
-  /// 是否需要动态显示网络连接状态页面
-  ///
-  /// 默认不开启
-  bool get isDynamicCheckConnectivity => false;
-
-  /// 通用导航栏
-  commonAppBar({String? title, Color? backgroundColor}) {
-    return AAppBar(
-      title: title,
-      backgroundColor: backgroundColor,
     );
   }
 }
@@ -89,7 +111,6 @@ abstract class BaseView<T extends BaseViewController>
 //       title: title,
 //       backgroundColor: backgroundColor,
 //       actions: const [
-//         ServerIcon(),
 //       ],
 //     );
 //   }
@@ -100,19 +121,77 @@ abstract class BaseView<T extends BaseViewController>
 // }
 
 abstract class BaseViewController extends GetxController {
+  /// 是否支持生命周期调用网络请求
+  bool isShowRepeatNetwork = true;
+
+  /// 是否在页面初始化调用一次网络请求方法`onShowRepeatNetwork`，
+  ///
+  /// true:第一次请求网络;
+  ///
+  /// false:不请求网络，但是 `isShowRepeatNetwork = true` 时生命周期函数自动调用请求
+  bool isOnInitRequest = true;
+
+  /// 控制页面的网络状态显示，不采用网络监听的方式动态修改，通过网络请求返回结果手动设置
+  final connectivity = true.obs;
+
   /// 进入页面时间
   int timestamp = 0;
 
-  @override
-  onInit() {
-    timestamp = DateTime.now().millisecondsSinceEpoch;
+  /// 请求网络的定时器
+  // Timer? _requestTimer;
 
+  @override
+  onInit() async {
+    timestamp = DateTime.now().millisecondsSinceEpoch;
     super.onInit();
-    // if (!isPagedRefresh) {
-    //   onRefresh();
-    // }
   }
 
-  /// 进入页面的初始数据获取
-  Future onBaseRequest() async => null;
+  @override
+  void onReady() async {
+    super.onReady();
+
+    if (isOnInitRequest) {
+      await onShowRepeatNetwork();
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await 2.delay();
+      isOnInitRequest = false;
+    });
+  }
+
+  @override
+  onClose() {
+    // reconnectStopTimer();
+    super.onClose();
+  }
+
+  /// 页面显示的回调，通过组件生命周期监听实现
+  ///
+  /// 通常用于请求网络，刷新数据
+  Future onShowRepeatNetwork() async => null;
+
+  /// 断网时重复请求网络，如果对应用使用网络监听则可以不使用
+  // bool _isRepeatNetwork = false;
+  // reconnectStartTimer() {
+  //   reconnectStopTimer();
+  //   _requestTimer = Timer.periodic(const Duration(seconds: 2), (timer) async {
+  //     if (_isRepeatNetwork) {
+  //       return;
+  //     }
+  //     AppService.to.isHideLoading = true;
+
+  //     _isRepeatNetwork = true;
+  //     await 2.delay();
+  //     try {
+  //       await onShowRepeatNetwork();
+  //     } catch (e) {}
+  //     _isRepeatNetwork = false;
+  //   });
+  // }
+
+  // reconnectStopTimer() {
+  //   AppService.to.isHideLoading = false;
+  //   _requestTimer?.cancel();
+  //   _requestTimer = null;
+  // }
 }

@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:get/get.dart';
+import 'package:tabs_template/app.dart';
 
-class MineController extends GetxController {
+class MineController extends BaseViewController {
   final count = Random().nextInt(999);
 }

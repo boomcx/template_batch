@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:get/get.dart';
+import 'package:tabs_template/app.dart';
 
-class MessageController extends GetxController {
+class MessageController extends BaseViewController {
   final count = Random().nextInt(999);
 }

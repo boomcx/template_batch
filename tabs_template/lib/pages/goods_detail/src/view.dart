@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:tabs_template/app.dart';
+import 'package:tabs_template/tabbar.dart';
 
-import '/tabbar.dart';
+import '../goods_detail.dart';
 
-import '../../app.dart';
-import 'godos_detail.dart';
-
-class GodosDetailView extends GetView<GodosDetailController> {
-  const GodosDetailView({super.key});
+class GoodsDetailView extends BaseView<GoodsDetailController> {
+  const GoodsDetailView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  PreferredSizeWidget? buildAppBar(BuildContext context) {
+    return const AAppBar(title: 'NewsDetailView');
+  }
+
+  @override
+  Widget buildBody(BuildContext context) {
     return Scaffold(
       appBar: const AAppBar(title: 'NewsDetailView'),
       body: Center(
         child: ElevatedButton(
           onPressed: () {
             if (controller.title > 300) {
-              Get.toNamed(kRouteGodosDetail, parameters: {
+              Get.toNamed(kRouteGoodsDetail, parameters: {
                 'id': controller.title.toString(),
               });
             } else {

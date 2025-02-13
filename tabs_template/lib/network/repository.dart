@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:tabs_template/network/req_interceptor.dart';
-import 'package:tabs_template/network/resp_interceptor.dart';
+import './req_interceptor.dart';
+import './resp_interceptor.dart';
 
 import '../widgets/common/toast.dart';
 import 'api_client.dart';
@@ -28,28 +28,6 @@ class NetRepository {
           requestBody: true,
         ),
       ]),
-    baseUrl: _devDomain.host,
+    baseUrl: 'https://api.apiopen.top/api',
   );
-}
-
-final _devDomain = AppDomain(
-  host: 'https://api.apiopen.top/api',
-  pcHost: 'http://www.xxx.com ',
-);
-
-class AppDomain {
-  /// 接口域名
-  final String host;
-
-  /// 电脑端地址
-  final String pcHost;
-
-  /// final String host1;
-  /// final String host2;
-  /// ...
-
-  AppDomain({
-    required this.host,
-    required this.pcHost,
-  });
 }

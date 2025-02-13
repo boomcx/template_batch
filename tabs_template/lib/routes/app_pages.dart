@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import '/pages/goods_detail/goods_detail.dart';
 
 import '../widgets/common/toast.dart';
-import '/pages/godos_detail/godos_detail.dart';
 import '/pages/mine/theme_change/theme_change.dart';
 import '/tabbar.dart';
 
@@ -12,7 +12,7 @@ class AppPages {
   AppPages._();
 
   // ignore: constant_identifier_names
-  static const INITIAL = kRouteTabbar;
+  static const initial = kRouteTabbar;
 
   static final routes = [
     GetPage(
@@ -23,13 +23,27 @@ class AppPages {
       binding: TabbarBinding(),
       canPop: false,
       onPopInvoked: (didPop, result) {
-        AppHandler.instance.esc();
+        AppHandler.instance.exit();
       },
+      // children: [
+      //   GetPage(
+      //     name: kRouteTabbarHome,
+      //     page: () => const TabbarScaffold(TabbarType.home),
+      //   ),
+      //   GetPage(
+      //     name: kRouteTabbarMessage,
+      //     page: () => const TabbarScaffold(TabbarType.message),
+      //   ),
+      //   GetPage(
+      //     name: kRouteTabbarMine,
+      //     page: () => const TabbarScaffold(TabbarType.mine),
+      //   ),
+      // ],
     ),
     GetPage(
-      name: kRouteGodosDetail,
-      page: () => const GodosDetailView(),
-      binding: GodosDetailBinding(),
+      name: kRouteGoodsDetail,
+      page: () => const GoodsDetailView(),
+      binding: GoodsDetailBinding(),
     ),
     GetPage(
       name: kRouteThemeChange,
@@ -39,6 +53,9 @@ class AppPages {
       preventDuplicateHandlingMode: PreventDuplicateHandlingMode.recreate,
     ),
   ];
+
+  /// GetRouterOutlet mode 嵌套式导航
+  // static final routes = [ ];
 }
 
 /// 双击退出应用
@@ -50,7 +67,7 @@ class AppHandler {
   bool isQuit = false;
 
   /// 退出应用程序
-  esc() async {
+  exit() async {
     if (isQuit) {
       // exit(0);
       await SystemChannels.platform.invokeMethod('SystemNavigator.pop');

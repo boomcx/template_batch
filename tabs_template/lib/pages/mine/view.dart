@@ -5,11 +5,16 @@ import '/pages/mine/theme_change/theme_change.dart';
 import '../../app.dart';
 import 'controller.dart';
 
-class MineView extends GetView<MineController> {
+class MineView extends BaseView<MineController> {
   const MineView({super.key});
 
-  // 主视图
-  Widget _buildView() {
+  @override
+  PreferredSizeWidget? buildAppBar(BuildContext context) {
+    return const AAppBar(title: 'MineView', isRootNavigator: true);
+  }
+
+  @override
+  Widget buildBody(BuildContext context) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -18,20 +23,13 @@ class MineView extends GetView<MineController> {
           ElevatedButton(
             onPressed: () {
               Get.toNamed(kRouteThemeChange);
+              // Get.toNamed(kRouteGoodsDetail, parameters: {
+              //   'id': '99999',
+              // });
             },
             child: const Text('changeDarkMode'),
           ),
         ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const AAppBar(title: 'MineView', isRootNavigator: true),
-      body: SafeArea(
-        child: _buildView(),
       ),
     );
   }

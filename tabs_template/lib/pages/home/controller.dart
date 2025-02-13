@@ -1,12 +1,7 @@
 import 'dart:math';
 
-import 'package:get/get.dart';
+import 'package:tabs_template/app.dart';
 
-class HomeController extends GetxController {
+class HomeController extends BaseViewController {
   final count = Random().nextInt(999).obs;
-
-  @override
-  void onInit() async {
-    super.onInit();
-  }
 }

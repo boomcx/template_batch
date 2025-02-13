@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tabs_template/services/app.dart';
 
 import '/support_files/theme.dart';
 import 'app_progress_indicator.dart';
@@ -23,6 +24,9 @@ showMessage(String message, {Function()? onDissmiss}) {
 }
 
 showLoading({String? message}) {
+  if (AppService.to.isHideLoading) {
+    return;
+  }
   hideLoading();
   Toast.showLoading(message: message);
 }

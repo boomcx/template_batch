@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 import 'app.dart';
 import 'routes/app_pages.dart';
@@ -12,7 +15,7 @@ import 'service.dart';
 void main() async {
   await _initAsync();
   runApp(const MyApp());
-  await _initAsyncComplete();
+  await _initAsyncEnd();
 }
 
 _initAsync() async {
@@ -37,7 +40,7 @@ _initAsync() async {
 }
 
 // 启动后配置
-Future _initAsyncComplete() async {
+Future _initAsyncEnd() async {
   // 调起主屏后，移除闪屏页
   FlutterNativeSplash.remove();
 
@@ -60,9 +63,28 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
+  StreamSubscription<InternetStatus>? _subscription;
+
   @override
   void initState() {
     super.initState();
+    _subscription =
+        InternetConnection().onStatusChange.listen((InternetStatus status) {
+      switch (status) {
+        case InternetStatus.connected:
+          AppService.to.connectivity.value = true;
+          break;
+        case InternetStatus.disconnected:
+          AppService.to.connectivity.value = false;
+          break;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -76,7 +98,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       themeMode: ThemeManager.to.mode,
       theme: ThemeManager.to.themeData(),
       darkTheme: ThemeManager.to.themeData(true),
-      initialRoute: AppPages.INITIAL,
+      initialRoute: AppPages.initial,
       getPages: AppPages.routes,
       // unknownRoute: AppPages.unknownRoute,
       // scrollBehavior: CustomScrollBehavior(),

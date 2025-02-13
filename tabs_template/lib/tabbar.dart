@@ -69,7 +69,7 @@ class TabbarScaffold extends GetView<TabbarController> {
             return Center(
                 child: _assets(item.icon + (isActive ? '_slt' : '_nor')));
           },
-          backgroundColor: Colors.white,
+          backgroundColor: context.appColors.backgroundGrey,
           gapLocation: GapLocation.none,
           activeIndex: controller.tabCur.value.index,
           onTap: (index) {

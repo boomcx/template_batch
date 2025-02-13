@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:get/get.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 /// `event_bus`通知挂载
 class AppNeedToLogin {}
@@ -15,42 +12,40 @@ class AppService extends GetxService {
   static EventBus get bus => to._bus;
   final _bus = EventBus();
 
+  /// 是否隐藏 loading
+  bool isHideLoading = false;
+
   /// 获取设备的唯一编码
   SystemDevice device = SystemDevice();
 
-  /// 连接次数
-  int connectedTimes = 0;
-  var isConnected = true.obs;
-  Future<bool> get connectedStatus async {
-    isConnected.value = true;
-    return InternetConnection().hasInternetAccess;
-  }
+  /// 控制页面的网络状态显示，不采用网络监听的方式动态修改，通过网络请求返回结果手动设置
+  final connectivity = true.obs;
 
   /// 网络监听
-  StreamSubscription<InternetStatus>? listener;
+  // StreamSubscription<InternetStatus>? listener;
 
   @override
   void onInit() async {
     super.onInit();
     initDeviceInfo();
-    initConnectivity();
+    // initConnectivity();
   }
 
   /// 网络连接
-  initConnectivity() async {
-    listener =
-        InternetConnection().onStatusChange.listen((InternetStatus status) {
-      switch (status) {
-        case InternetStatus.connected:
-          isConnected.value = true;
-          connectedTimes++;
-          break;
-        case InternetStatus.disconnected:
-          isConnected.value = false;
-          break;
-      }
-    });
-  }
+  // initConnectivity() async {
+  //   listener =
+  //       InternetConnection().onStatusChange.listen((InternetStatus status) {
+  //     switch (status) {
+  //       case InternetStatus.connected:
+  //         isConnected.value = true;
+  //         connectedTimes++;
+  //         break;
+  //       case InternetStatus.disconnected:
+  //         isConnected.value = false;
+  //         break;
+  //     }
+  //   });
+  // }
 
   /// 初始化设备信息
   initDeviceInfo() async {

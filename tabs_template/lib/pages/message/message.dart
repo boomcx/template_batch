@@ -12,6 +12,9 @@ export './view.dart';
 ///
 const String kRouteMessage = '/message';
 
+/// 嵌套路由
+const String kRouteNameMessage = '/tabbar/message';
+
 /// AppPages : 注册 GetPage
 /// 可以直接复制到 AppPages 文件中注册页面路由
 ///
