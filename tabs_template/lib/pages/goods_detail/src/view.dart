@@ -4,7 +4,7 @@ import 'package:tabs_template/tabbar.dart';
 
 import '../goods_detail.dart';
 
-class GoodsDetailView extends BaseView<GoodsDetailController> {
+class GoodsDetailView extends BaseRecreateView<GoodsDetailController> {
   const GoodsDetailView({super.key});
 
   @override
@@ -14,22 +14,22 @@ class GoodsDetailView extends BaseView<GoodsDetailController> {
 
   @override
   Widget buildBody(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          // if (controller.title > 300) {
-          Get.toNamed(
-            kRouteGoodsDetail,
-            parameters: {
-              // 'id': controller.title.toString(),
-            },
-            preventDuplicates: false,
-          );
-          // } else {
-          //   TabbarController.to.switchTo(TabbarType.mine);
-          // }
-        },
-        child: Text("NewsDetailView - ${Get.parameters['id']} - ${controller}"),
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            if (controller.title > 300) {
+              Get.toNamed(kRouteGoodsDetail, parameters: {
+                'id': controller.title.toString(),
+                'tag': UniqueKey().toString(),
+              });
+            } else {
+              TabbarController.to.switchTo(TabbarType.mine);
+            }
+          },
+          child:
+              Text("NewsDetailView - ${Get.parameters['id']} - ${controller}"),
+        ),
       ),
     );
   }

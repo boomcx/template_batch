@@ -8,57 +8,9 @@ import '/service.dart';
 import 'package:flutter/material.dart';
 // import 'package:lifecycle/lifecycle.dart';
 
-abstract class BaseView<T extends BaseViewController>
-    extends GetView<BaseViewController> {
-  const BaseView({super.key});
-
-  @override
-  T get controller => Get.find<T>(tag: tag);
-
-  @override
-  Widget build(BuildContext context) {
-    final scaffold = Scaffold(
-      appBar: buildAppBar(context),
-      backgroundColor: buildBackgroundColor(context),
-      extendBody: extendBody,
-      extendBodyBehindAppBar: extendBodyBehindAppBar,
-      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      // 这里生命周期和原生的`onShow`有出入，具体逻辑差异需要自己特殊处理
-      body: LifecycleWrapper(
-        onLifecycleEvent: (event) {
-          bool appeared = event == LifecycleEvent.active;
-          // controller.onLifecycleEvent(event);
-          if (Get.isDialogOpen == true || Get.isBottomSheetOpen == true) {
-            return;
-          }
-          // && !controller.isPagedRefresh
-          if (!controller.isOnInit && appeared && controller.isUseRepeatShow) {
-            controller.onShowRequest();
-          }
-        },
-        child: buildBody(context),
-      ),
-      bottomNavigationBar: Obx(
-        () {
-          return !AppService.to.connectivity.value
-              ? const SizedBox.shrink()
-              : buildBottomNavigationBar(context) ?? const SizedBox.shrink();
-        },
-      ),
-    );
-
-    return Obx(() {
-      if (!AppService.to.connectivity.value) {
-        // controller.reconnectStartTimer();
-        return Scaffold(
-          body: noNetworkView(context),
-        );
-      }
-
-      // controller.reconnectStopTimer();
-      return scaffold;
-    });
-  }
+mixin BaseViewInterface<T extends BaseViewController> {
+  // 抽象 getter：控制器（由子类实现，确保与自身继承的 GetView/ GetWidget 匹配）
+  T get baseController;
 
   bool get extendBody => false;
   bool get extendBodyBehindAppBar => false;
@@ -87,7 +39,7 @@ abstract class BaseView<T extends BaseViewController>
           await 2.delay();
           hideLoading();
           if (await InternetConnection().hasInternetAccess) {
-            controller.onShowRequest();
+            baseController.onShowRequest();
             AppService.to.connectivity.value = true;
             // controller.tapRefreshCount++;
             // controller.update(['tapRefreshCount1', 'tapRefreshCount2']);
@@ -98,29 +50,98 @@ abstract class BaseView<T extends BaseViewController>
       },
     );
   }
+
+  // 公共 build 逻辑实现（核心公共代码）
+  Widget buildCommon(BuildContext context) {
+    final scaffold = Scaffold(
+      appBar: buildAppBar(context),
+      backgroundColor: buildBackgroundColor(context),
+      extendBody: extendBody,
+      extendBodyBehindAppBar: extendBodyBehindAppBar,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      // 这里生命周期和原生的`onShow`有出入，具体逻辑差异需要自己特殊处理
+      body: LifecycleWrapper(
+        onLifecycleEvent: (event) {
+          bool appeared = event == LifecycleEvent.active;
+          // controller.onLifecycleEvent(event);
+          if (Get.isDialogOpen == true || Get.isBottomSheetOpen == true) {
+            return;
+          }
+          // && !controller.isPagedRefresh
+          if (!baseController.isOnInit &&
+              appeared &&
+              baseController.isUseRepeatShow) {
+            baseController.onShowRequest();
+          }
+        },
+        child: buildBody(context),
+      ),
+      bottomNavigationBar: Obx(
+        () {
+          return !AppService.to.connectivity.value
+              ? const SizedBox.shrink()
+              : buildBottomNavigationBar(context) ?? const SizedBox.shrink();
+        },
+      ),
+    );
+
+    return Obx(() {
+      if (!AppService.to.connectivity.value) {
+        // controller.reconnectStartTimer();
+        return Scaffold(
+          body: noNetworkView(context),
+        );
+      }
+
+      // controller.reconnectStopTimer();
+      return scaffold;
+    });
+  }
 }
 
-/// 通用导航栏
-// class commonAppBar extends StatelessWidget implements PreferredSizeWidget {
-//   const commonAppBar({this.title, this.backgroundColor, super.key});
+/// 普通``GetView``页面
 
-//   final String? title;
-//   final Color? backgroundColor;
+abstract class BaseView<T extends BaseViewController> extends GetView<T>
+    with BaseViewInterface {
+  const BaseView({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return AAppBar(
-//       title: title,
-//       backgroundColor: backgroundColor,
-//       actions: const [
-//       ],
-//     );
-//   }
+  @override
+  T get baseController => controller;
 
-//   @override
-//   Size get preferredSize =>
-//       const Size.fromHeight(kMinInteractiveDimensionCupertino + 2);
-// }
+  @override
+  Widget build(BuildContext context) => buildCommon(context);
+}
+
+/// ``GetWidget``页面,配合 ``Get.create()`` 实现页面重复创建
+///
+/// View
+/// ```
+/// class MyPage extends BaseReceateView<HomePageController> {}
+/// ```
+/// Binding (下述为5.0写法，4.0同理)
+/// ```
+/// class MyPageBinding extends Binding {
+///   @override
+///   List<Bind> dependencies() {
+///     return [
+///       Bind.create<MyPageController>(
+///         (_) => MyPageController(),
+///       )
+///     ];
+///   }
+/// }
+/// ```
+///
+abstract class BaseRecreateView<T extends BaseViewController>
+    extends GetWidget<T> with BaseViewInterface {
+  const BaseRecreateView({super.key});
+
+  @override
+  T get baseController => controller;
+
+  @override
+  Widget build(BuildContext context) => buildCommon(context);
+}
 
 abstract class BaseViewController extends GetxController {
   /// 是否在初始化调用一次网络请求，`isUseRepeatShow` 之后生命周期函数自动调用请求
@@ -154,11 +175,11 @@ abstract class BaseViewController extends GetxController {
     });
   }
 
-  @override
-  onClose() {
-    // reconnectStopTimer();
-    super.onClose();
-  }
+  // @override
+  // onClose() {
+  //   // reconnectStopTimer();
+  //   super.onClose();
+  // }
 
   /// 页面显示的回调，通过组件生命周期监听实现
   ///

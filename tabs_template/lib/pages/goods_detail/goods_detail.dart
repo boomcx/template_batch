@@ -26,8 +26,8 @@ class GoodsDetailBinding extends Binding {
   @override
   List<Bind> dependencies() {
     return [
-      Bind.lazyPut<GoodsDetailController>(
-        () => GoodsDetailController(),
+      Bind.create<GoodsDetailController>(
+        (_) => GoodsDetailController(),
       )
     ];
   }
