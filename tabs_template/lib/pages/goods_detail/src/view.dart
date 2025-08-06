@@ -14,22 +14,22 @@ class GoodsDetailView extends BaseView<GoodsDetailController> {
 
   @override
   Widget buildBody(BuildContext context) {
-    return Scaffold(
-      appBar: const AAppBar(title: 'NewsDetailView'),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            if (controller.title > 300) {
-              Get.toNamed(kRouteGoodsDetail, parameters: {
-                'id': controller.title.toString(),
-              });
-            } else {
-              TabbarController.to.switchTo(TabbarType.mine);
-            }
-          },
-          child: Text(
-              "NewsDetailView - ${Get.parameters['id']} - ${controller.title}"),
-        ),
+    return Center(
+      child: ElevatedButton(
+        onPressed: () {
+          // if (controller.title > 300) {
+          Get.toNamed(
+            kRouteGoodsDetail,
+            parameters: {
+              // 'id': controller.title.toString(),
+            },
+            preventDuplicates: false,
+          );
+          // } else {
+          //   TabbarController.to.switchTo(TabbarType.mine);
+          // }
+        },
+        child: Text("NewsDetailView - ${Get.parameters['id']} - ${controller}"),
       ),
     );
   }

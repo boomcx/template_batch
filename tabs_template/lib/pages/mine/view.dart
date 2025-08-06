@@ -19,7 +19,7 @@ class MineView extends BaseView<MineController> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("MineView ${controller.count}").paddingOnly(bottom: 20),
+          Text("MineView ${controller}").paddingOnly(bottom: 20),
           ElevatedButton(
             onPressed: () {
               Get.toNamed(kRouteThemeChange);

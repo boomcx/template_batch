@@ -44,6 +44,8 @@ class AppPages {
       name: kRouteGoodsDetail,
       page: () => const GoodsDetailView(),
       binding: GoodsDetailBinding(),
+      preventDuplicates: false,
+      preventDuplicateHandlingMode: PreventDuplicateHandlingMode.recreate,
     ),
     GetPage(
       name: kRouteThemeChange,

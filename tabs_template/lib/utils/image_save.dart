@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:dio/dio.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 
 import '/widgets/common/toast.dart';
 import 'permission_util.dart';
@@ -12,7 +12,7 @@ class ImageSaver {
   static bytesSave(Uint8List pngBytes) async {
     PermissionUtil().requestPhoto().then((value) async {
       if (value) {
-        final result = await ImageGallerySaver.saveImage(pngBytes, quality: 60);
+        final result = await ImageGallerySaverPlus.saveImage(pngBytes, quality: 60);
         if (result['isSuccess'] == true) {
           showMessage("保存图片成功");
         } else {

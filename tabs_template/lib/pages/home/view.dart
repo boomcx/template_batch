@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabs_template/pages/goods_detail/goods_detail.dart';
 import 'package:tabs_template/pages/home/home.dart';
+import 'package:tabs_template/utils/device_utils.dart';
 import '/app.dart';
 
 import 'controller.dart';

@@ -95,61 +95,74 @@ class SpeedyPagedList<T> extends StatelessWidget {
       header: header,
       locatorMode: locatorMode,
       childBuilder: (context, physics) {
-        if (_itemHeaderBuilder != null || _itemFooterBuilder != null) {
-          return PagedListView<int, T>.separated(
+        return PagingListener(
+          controller: controller.pagingController,
+          builder: (context, state, fetchNextPage) {
+            return _pagedListBuilder(context, state, fetchNextPage, physics);
+          },
+        );
+      },
+    );
+  }
+
+  _pagedListBuilder(BuildContext context, PagingState<int, T> state,
+      void Function() fetchNextPage, ScrollPhysics physics) {
+    if (_itemHeaderBuilder != null || _itemFooterBuilder != null) {
+      return PagedListView<int, T>.separated(
+        physics: physics,
+        padding: padding,
+        state: state,
+        fetchNextPage: fetchNextPage,
+        builderDelegate: pagedChildDelegate(
+          (context, item, index) {
+            return Column(
+              children: [
+                if (_itemHeaderBuilder != null)
+                  _itemHeaderBuilder.call(context, index),
+                itemBuilder.call(context, index, item),
+                if (_itemFooterBuilder != null)
+                  _itemFooterBuilder.call(context, index),
+              ],
+            );
+          },
+          loadingView: loadingView,
+          emptyView: emptyView,
+          animateTransitions: animateTransitions,
+        ),
+        separatorBuilder: _separatorBuilder!,
+      );
+    }
+
+    return _separatorBuilder != null
+        ? PagedListView<int, T>.separated(
             physics: physics,
             padding: padding,
-            pagingController: controller.pagingController,
+            state: state,
+            fetchNextPage: fetchNextPage,
             builderDelegate: pagedChildDelegate(
               (context, item, index) {
-                return Column(
-                  children: [
-                    if (_itemHeaderBuilder != null)
-                      _itemHeaderBuilder.call(context, index),
-                    itemBuilder.call(context, index, item),
-                    if (_itemFooterBuilder != null)
-                      _itemFooterBuilder.call(context, index),
-                  ],
-                );
+                return itemBuilder.call(context, index, item);
               },
               loadingView: loadingView,
               emptyView: emptyView,
               animateTransitions: animateTransitions,
             ),
-            separatorBuilder: _separatorBuilder!,
+            separatorBuilder: _separatorBuilder,
+          )
+        : PagedListView<int, T>(
+            physics: physics,
+            padding: padding,
+            state: state,
+            fetchNextPage: fetchNextPage,
+            builderDelegate: pagedChildDelegate(
+              (context, item, index) {
+                return itemBuilder.call(context, index, item);
+              },
+              loadingView: loadingView,
+              emptyView: emptyView,
+              animateTransitions: animateTransitions,
+            ),
           );
-        }
-
-        return _separatorBuilder != null
-            ? PagedListView<int, T>.separated(
-                physics: physics,
-                padding: padding,
-                pagingController: controller.pagingController,
-                builderDelegate: pagedChildDelegate(
-                  (context, item, index) {
-                    return itemBuilder.call(context, index, item);
-                  },
-                  loadingView: loadingView,
-                  emptyView: emptyView,
-                  animateTransitions: animateTransitions,
-                ),
-                separatorBuilder: _separatorBuilder,
-              )
-            : PagedListView<int, T>(
-                physics: physics,
-                padding: padding,
-                pagingController: controller.pagingController,
-                builderDelegate: pagedChildDelegate(
-                  (context, item, index) {
-                    return itemBuilder.call(context, index, item);
-                  },
-                  loadingView: loadingView,
-                  emptyView: emptyView,
-                  animateTransitions: animateTransitions,
-                ),
-              );
-      },
-    );
   }
 }
 

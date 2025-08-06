@@ -160,14 +160,14 @@ modfy_file(
     sdk: flutter
 
   # get: ^5.0.0-release-candidate-6
-  get: ^5.0.0-release-candidate-9.2
+  get: ^5.0.0-release-candidate-9.3.2
   animated_bottom_navigation_bar: ^1.3.3
   json_annotation: ^4.9.0
   freezed_annotation: ^2.4.1
   get_storage: ^2.1.1
   bot_toast: ^4.1.3
   easy_refresh: ^3.4.0
-  infinite_scroll_pagination: ^4.0.0
+  infinite_scroll_pagination: ^5.0.0
   dio: ^5.4.3+1
   retrofit: ^4.1.0
   flutter_screenutil: ^5.9.3
@@ -175,13 +175,13 @@ modfy_file(
   simple_animations: ^5.0.2
   event_bus: ^2.0.0
   photo_view: ^0.15.0
-  wechat_assets_picker: ^9.0.4
-  wechat_camera_picker: ^4.2.2
+  # wechat_assets_picker: ^9.0.4
+  # wechat_camera_picker: ^4.2.2
   flutter_native_splash: ^2.4.0
   path_provider: ^2.1.3
   # cached_network_image: ^3.2.2
   extended_image: ^8.2.1
-  image_gallery_saver: ^2.0.3
+  image_gallery_saver_plus: ^4.0.1
   permission_handler: ^11.3.1
   package_info_plus: ^8.0.0
   device_info_plus: ^10.1.0

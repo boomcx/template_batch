@@ -10,7 +10,7 @@ PagedChildBuilderDelegate<ItemType> pagedChildDelegate<ItemType>(
   ItemWidgetBuilder<ItemType> builder, {
   WidgetBuilder? loadingView,
   WidgetBuilder? emptyView,
-  WidgetBuilder? noMore,
+  WidgetBuilder? noMoreView,
   bool animateTransitions = false,
 }) =>
     PagedChildBuilderDelegate<ItemType>(
@@ -23,7 +23,7 @@ PagedChildBuilderDelegate<ItemType> pagedChildDelegate<ItemType>(
       noItemsFoundIndicatorBuilder:
           emptyView ?? (context) => const DefaultEmptyDataView(),
       newPageProgressIndicatorBuilder: (_) => const LoadingFooter(),
-      noMoreItemsIndicatorBuilder: noMore ?? (_) => const LoadingNoMore(),
+      noMoreItemsIndicatorBuilder: noMoreView ?? (_) => const LoadingNoMore(),
       newPageErrorIndicatorBuilder: (_) => const _LoadingTapMore(),
     );
 

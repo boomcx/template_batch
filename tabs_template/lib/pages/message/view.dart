@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../app.dart';
@@ -13,8 +15,16 @@ class MessageView extends BaseView<MessageController> {
 
   @override
   Widget buildBody(BuildContext context) {
-    return Center(
-      child: Text("MessageView ${controller.count}"),
+    return SpeedyPagedList.separated(
+      controller: controller as MessageController,
+      itemBuilder: (context, index, item) {
+        return Container(
+            color: Color.fromARGB(255, Random().nextInt(255),
+                Random().nextInt(255), Random().nextInt(255)),
+            height: 30,
+            child: Text('$index'));
+      },
+      separatorBuilder: (context, index) => Gaps.h10,
     );
   }
 }

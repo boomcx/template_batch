@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter_page_lifecycle/flutter_page_lifecycle.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:lifecycle/lifecycle.dart';
 
 import '/app.dart';
 import '/service.dart';
@@ -24,13 +24,16 @@ abstract class BaseView<T extends BaseViewController>
       extendBodyBehindAppBar: extendBodyBehindAppBar,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       // 这里生命周期和原生的`onShow`有出入，具体逻辑差异需要自己特殊处理
-      body: PageLifecycle(
-        stateChanged: (appeared) {
-          if (!appeared) {
+      body: LifecycleWrapper(
+        onLifecycleEvent: (event) {
+          bool appeared = event == LifecycleEvent.active;
+          // controller.onLifecycleEvent(event);
+          if (Get.isDialogOpen == true || Get.isBottomSheetOpen == true) {
             return;
           }
-          if (!controller.isOnInitRequest && controller.isShowRepeatNetwork) {
-            controller.onShowRepeatNetwork();
+          // && !controller.isPagedRefresh
+          if (!controller.isOnInit && appeared && controller.isUseRepeatShow) {
+            controller.onShowRequest();
           }
         },
         child: buildBody(context),
@@ -53,7 +56,6 @@ abstract class BaseView<T extends BaseViewController>
       }
 
       // controller.reconnectStopTimer();
-
       return scaffold;
     });
   }
@@ -85,7 +87,7 @@ abstract class BaseView<T extends BaseViewController>
           await 2.delay();
           hideLoading();
           if (await InternetConnection().hasInternetAccess) {
-            controller.onShowRepeatNetwork();
+            controller.onShowRequest();
             AppService.to.connectivity.value = true;
             // controller.tapRefreshCount++;
             // controller.update(['tapRefreshCount1', 'tapRefreshCount2']);
@@ -121,18 +123,12 @@ abstract class BaseView<T extends BaseViewController>
 // }
 
 abstract class BaseViewController extends GetxController {
-  /// 是否支持生命周期调用网络请求
-  bool isShowRepeatNetwork = true;
+  /// 是否在初始化调用一次网络请求，`isUseRepeatShow` 之后生命周期函数自动调用请求
+  /// (第一次不请求）
+  bool isOnInit = true;
 
-  /// 是否在页面初始化调用一次网络请求方法`onShowRepeatNetwork`，
-  ///
-  /// true:第一次请求网络;
-  ///
-  /// false:不请求网络，但是 `isShowRepeatNetwork = true` 时生命周期函数自动调用请求
-  bool isOnInitRequest = true;
-
-  /// 控制页面的网络状态显示，不采用网络监听的方式动态修改，通过网络请求返回结果手动设置
-  final connectivity = true.obs;
+  /// 是否使用 `onShow` 逻辑
+  bool isUseRepeatShow = true;
 
   /// 进入页面时间
   int timestamp = 0;
@@ -150,12 +146,11 @@ abstract class BaseViewController extends GetxController {
   void onReady() async {
     super.onReady();
 
-    if (isOnInitRequest) {
-      await onShowRepeatNetwork();
-    }
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await 2.delay();
-      isOnInitRequest = false;
+    onShowRequest().then((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await 2.delay();
+        isOnInit = false;
+      });
     });
   }
 
@@ -166,11 +161,11 @@ abstract class BaseViewController extends GetxController {
   }
 
   /// 页面显示的回调，通过组件生命周期监听实现
-  /// 
+  ///
   /// 默认进入页面会初始执行一次，以后每次页面显示的时候也会执行（如页面没被销毁的上级页面/根页面）
   ///
   /// 通常用于请求网络，刷新数据
-  Future onShowRepeatNetwork() async => null;
+  Future onShowRequest() async => null;
 
   /// 断网时重复请求网络，如果对应用使用网络监听则可以不使用
   // bool _isRepeatNetwork = false;

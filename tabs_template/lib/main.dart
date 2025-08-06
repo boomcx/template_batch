@@ -7,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:lifecycle/lifecycle.dart';
 
 import 'app.dart';
 import 'routes/app_pages.dart';
@@ -111,6 +112,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       },
       navigatorObservers: [
         Toast.toastNavigatorObserver(),
+        defaultLifecycleObserver,
       ],
       binds: [
         // 挂载公共服务

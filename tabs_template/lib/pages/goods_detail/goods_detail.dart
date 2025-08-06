@@ -21,7 +21,7 @@ const String kRouteGoodsDetail = '/goods_detail';
 ///       binding: GoodsDetailBinding(),
 ///     ),
 /// ```
-/// 
+///
 class GoodsDetailBinding extends Binding {
   @override
   List<Bind> dependencies() {
@@ -32,4 +32,3 @@ class GoodsDetailBinding extends Binding {
     ];
   }
 }
-

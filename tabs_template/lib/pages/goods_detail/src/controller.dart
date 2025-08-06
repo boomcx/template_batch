@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:tabs_template/app.dart';
+import '/app.dart';
 
 class GoodsDetailController extends BaseViewController {
   final title = Random().nextInt(999);
