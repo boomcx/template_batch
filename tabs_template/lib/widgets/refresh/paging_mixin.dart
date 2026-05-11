@@ -3,7 +3,19 @@ import 'dart:async';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:tabs_template/models/paging_index.dart';
+
+class PagedListRes<T> {
+  /// 当前页数据
+  List<T>? items;
+
+  /// 总数
+  int total;
+
+  PagedListRes(
+    this.items,
+    this.total,
+  );
+}
 
 /// 分页控制器
 ///
@@ -13,7 +25,7 @@ mixin PagingMixin<T> on GetxController {
   int initPage = 1;
 
   /// 当前页码请求返回的分页数据
-  PagingIndex<T>? pagingData;
+  PagedListRes<T>? requestRes;
 
   /// 全部的列表数据
   List<T> get items => _pagingController.items ?? [];
@@ -38,12 +50,12 @@ mixin PagingMixin<T> on GetxController {
 
     _pagingController = PagingController<int, T>(
       getNextPageKey: (state) {
-        if (pagingData == null) {
+        if (requestRes == null) {
           return initPage;
         }
 
         // 判断服务器数据是否全部获取
-        if (pagingData!.total > items.length) {
+        if (requestRes!.total > items.length) {
           final page = (state.keys?.last ?? initPage);
           return page + 1;
         }
@@ -51,8 +63,8 @@ mixin PagingMixin<T> on GetxController {
         return null;
       },
       fetchPage: (pageKey) async {
-        pagingData = await fecthData(pageKey);
-        return Future.value(pagingData?.list as List<T>? ?? []);
+        requestRes = await fecthData(pageKey);
+        return Future.value(requestRes?.items ?? []);
       },
     );
 
@@ -68,14 +80,14 @@ mixin PagingMixin<T> on GetxController {
   }
 
   /// 子类继承实现的请求方法
-  FutureOr<PagingIndex<T>> fecthData(int page);
+  FutureOr<PagedListRes<T>?> fecthData(int page);
 
   /// 请求数据中的状态监听
   void fecthDataStateChanged(PagingStatus status) {}
 
   /// 刷新数据
   Future onRefresh() async {
-    pagingData = null;
+    requestRes = null;
     _pagingController.status;
     _pagingController.refresh();
   }

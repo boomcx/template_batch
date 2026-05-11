@@ -46,7 +46,9 @@ class TabbarController extends GetxController {
 
   /// 指定切换到根路径
   void switchTo([TabbarType tab = TabbarType.home]) {
-    Get.offAllNamed(kRouteTabbar);
+    if (Get.routing.current != kRouteTabbar) {
+      Get.offAllNamed(kRouteTabbar);
+    }
     tabCur.value = tab;
   }
 }
