@@ -1,71 +1,110 @@
+import 'dart:developer';
 import 'package:dio/dio.dart';
 
-import '../models/app_token.dart';
-import '../widgets/common/toast.dart';
+import 'package:tabs_template/network/api_exception.dart';
+import 'package:tabs_template/models/app_token.dart';
+import 'package:tabs_template/widgets/common/toast.dart';
 
-/// 请求结果拦截相关的处理
+/// 统一处理接口结果。
+///
+/// - `code == 200` 时返回 `result`。
+/// - `code != 200` 时抛出 `ApiException`。
+/// - 请求失败时统一记录并弹框。
 class ResponseDataInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    if (response.requestOptions.headers['hideLoading'] != false) {
-      Toast.hideLoading();
+    _hideLoadingIfNeeded(response.requestOptions);
+
+    late BaseResponse resp;
+    try {
+      resp = _parseBaseResponse(response);
+    } on DioException catch (err) {
+      _handleException(err);
+      handler.reject(err);
+      return;
     }
 
-    // 网络畅通
-    // AppService.to.connectivity.value = true;
-
-    // 服务器返回的数据
-    BaseResponse resp = BaseResponse.fromJson(response.data);
-
-    // 请求成功
     if (resp.code == 200) {
       response.data = resp.data;
       handler.next(response);
       return;
     }
 
-    // 通用异常处理
-    if (resp.code == 401) {
-      // UserService.to.logout();
-      return;
-    }
-
-    // 将错误的返回数据，直接抛出到请求失败中处理
-    // 在接口调用的位置，使用 [try...catch] 进行错误捕获
-    throw DioException(
-      requestOptions: response.requestOptions,
-      error: DioExceptionType.badResponse,
-      // 这里debug模式输出完整的错误日志方便定位问题，线上环境直接输出错误信息
-      // message: kReleaseMode ? resp.message : resp.toJson().toString(),
-      message: resp.message,
+    final apiException = ApiException(
+      code: resp.code,
+      message: _errorMessage(resp.message),
+      data: resp.data,
+      response: response,
     );
-    // handler.reject(
-    //   DioException(
-    //     requestOptions: response.requestOptions,
-    //     error: DioExceptionType.badResponse,
-    //     message: resp.message,
-    //   ),
-    //   false,
-    // );
+    final exception = DioException(
+      requestOptions: response.requestOptions,
+      response: response,
+      type: DioExceptionType.badResponse,
+      message: apiException.message,
+      error: apiException,
+    );
+    _handleException(exception);
+    handler.reject(exception);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    super.onError(err, handler);
-    // final path = '${err.requestOptions.uri}';
-    hideLoading();
+    _hideLoadingIfNeeded(err.requestOptions);
+    _handleException(err);
+    handler.reject(err);
+  }
 
-    // final code = err.response?.data['succession'];
-
-    // 网络异常
-    // InternetConnection().hasInternetAccess.then((value) {
-    //   AppService.to.connectivity.value = value;
-    // });
-
-    // 显示错误信息
-    if (err.message?.isNotEmpty == true &&
-        err.type != DioExceptionType.connectionTimeout) {
-      Toast.message(err.message!);
+  /// 解析服务器统一响应结构。
+  BaseResponse _parseBaseResponse(Response response) {
+    final data = response.data;
+    if (data is Map<String, dynamic>) {
+      return BaseResponse.fromJson(data);
     }
+    if (data is Map) {
+      return BaseResponse.fromJson(Map<String, dynamic>.from(data));
+    }
+
+    throw DioException(
+      requestOptions: response.requestOptions,
+      response: response,
+      type: DioExceptionType.badResponse,
+      message: '响应数据格式异常',
+      error: data,
+    );
+  }
+
+  /// 按请求配置决定是否关闭 loading。
+  void _hideLoadingIfNeeded(RequestOptions options) {
+    if (options.headers['hideLoading'] != false) {
+      Toast.hideLoading();
+    }
+  }
+
+  /// 统一记录并弹出错误信息。
+  void _handleException(DioException err) {
+    final message = _extractMessage(err);
+    log(
+      message,
+      name: 'ResponseDataInterceptor',
+      error: err,
+      stackTrace: err.stackTrace,
+    );
+    Toast.showError(message);
+  }
+
+  /// 优先读取业务异常文案。
+  String _extractMessage(DioException err) {
+    final error = err.error;
+    if (error is ApiException) {
+      return _errorMessage(error.message);
+    }
+    return _errorMessage(err.message);
+  }
+
+  String _errorMessage(String? message) {
+    if (message?.trim().isNotEmpty == true) {
+      return message!.trim();
+    }
+    return '请求异常';
   }
 }

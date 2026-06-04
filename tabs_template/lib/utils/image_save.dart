@@ -4,8 +4,8 @@ import 'dart:ui' as ui;
 import 'package:dio/dio.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 
-import '/widgets/common/toast.dart';
-import 'permission_util.dart';
+import 'package:tabs_template/widgets/common/toast.dart';
+import 'package:tabs_template/utils/permission_util.dart';
 
 class ImageSaver {
   /// 保存二进制图片

@@ -1,10 +1,8 @@
-library goods_detail;
-
 import 'package:get/get.dart';
-import './src/controller.dart';
+import 'package:tabs_template/pages/goods_detail/src/controller.dart';
 
-export './src/controller.dart';
-export './src/view.dart';
+export 'package:tabs_template/pages/goods_detail/src/controller.dart';
+export 'package:tabs_template/pages/goods_detail/src/view.dart';
 
 /// 独立到每个页面，用脚本生成对应的路由名称
 /// 路由名称

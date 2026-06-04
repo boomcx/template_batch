@@ -3,13 +3,17 @@ import 'dart:async';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:lifecycle/lifecycle.dart';
 
-import '/app.dart';
-import '/service.dart';
+import 'package:tabs_template/app.dart';
+import 'package:tabs_template/service.dart';
 import 'package:flutter/material.dart';
 // import 'package:lifecycle/lifecycle.dart';
 
+/// 通用页面壳层。
+///
+/// 子类通常只需要实现 `buildBody`，可选实现 `buildAppBar` 和
+/// `onShowRequest`。
 mixin BaseViewInterface<T extends BaseViewController> {
-  // 抽象 getter：控制器（由子类实现，确保与自身继承的 GetView/ GetWidget 匹配）
+  /// 页面控制器。
   T get baseController;
 
   bool get extendBody => false;
@@ -28,7 +32,7 @@ mixin BaseViewInterface<T extends BaseViewController> {
   /// 构建页面底部显示内容
   Widget? buildBottomNavigationBar(BuildContext context) => null;
 
-  /// 没有网络连接的展示视图
+  /// 断网占位页，点击后会重新探测网络并刷新。
   Widget noNetworkView(BuildContext context) {
     return NetworkAnomalyView(
       onTap: () async {
@@ -51,7 +55,7 @@ mixin BaseViewInterface<T extends BaseViewController> {
     );
   }
 
-  // 公共 build 逻辑实现（核心公共代码）
+  /// 公共 build 逻辑。
   Widget buildCommon(BuildContext context) {
     final scaffold = Scaffold(
       appBar: buildAppBar(context),
@@ -59,7 +63,7 @@ mixin BaseViewInterface<T extends BaseViewController> {
       extendBody: extendBody,
       extendBodyBehindAppBar: extendBodyBehindAppBar,
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      // 这里生命周期和原生的`onShow`有出入，具体逻辑差异需要自己特殊处理
+      // 页面重新激活时触发刷新。
       body: LifecycleWrapper(
         onLifecycleEvent: (event) {
           bool appeared = event == LifecycleEvent.active;
@@ -99,7 +103,9 @@ mixin BaseViewInterface<T extends BaseViewController> {
   }
 }
 
-/// 普通``GetView``页面
+/// 普通 `GetView` 页面基类。
+///
+/// 适合单实例控制器页面。
 
 abstract class BaseView<T extends BaseViewController> extends GetView<T>
     with BaseViewInterface {
@@ -112,13 +118,13 @@ abstract class BaseView<T extends BaseViewController> extends GetView<T>
   Widget build(BuildContext context) => buildCommon(context);
 }
 
-/// ``GetWidget``页面,配合 ``Get.create()`` 实现页面重复创建
+/// `GetWidget` 页面基类，配合 `Bind.create()` 使用。
 ///
-/// View
+/// 使用方式：
 /// ```
 /// class MyPage extends BaseReceateView<HomePageController> {}
 /// ```
-/// Binding (下述为5.0写法，4.0同理)
+/// Binding:
 /// ```
 /// class MyPageBinding extends Binding {
 ///   @override
@@ -144,17 +150,16 @@ abstract class BaseRecreateView<T extends BaseViewController>
 }
 
 abstract class BaseViewController extends GetxController {
-  /// 是否在初始化调用一次网络请求，`isUseRepeatShow` 之后生命周期函数自动调用请求
-  /// (第一次不请求）
+  /// 首次进入后是否跳过一次重复刷新。
   bool isOnInit = true;
 
-  /// 是否使用 `onShow` 逻辑
+  /// 是否启用页面回前台刷新。
   bool isUseRepeatShow = true;
 
-  /// 进入页面时间
+  /// 进入页面时间戳。
   int timestamp = 0;
 
-  /// 请求网络的定时器
+  /// 可选的重复请求定时器。
   // Timer? _requestTimer;
 
   @override
@@ -181,11 +186,10 @@ abstract class BaseViewController extends GetxController {
   //   super.onClose();
   // }
 
-  /// 页面显示的回调，通过组件生命周期监听实现
+  /// 页面显示回调。
   ///
-  /// 默认进入页面会初始执行一次，以后每次页面显示的时候也会执行（如页面没被销毁的上级页面/根页面）
-  ///
-  /// 通常用于请求网络，刷新数据
+  /// 默认首次进入会执行一次，后续在页面重新激活时也会执行。
+  /// 通常在这里请求接口或刷新数据。
   Future onShowRequest() async => null;
 
   /// 断网时重复请求网络，如果对应用使用网络监听则可以不使用

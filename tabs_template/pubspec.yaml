@@ -41,35 +41,34 @@ dependencies:
 
   # get: ^5.0.0-release-candidate-6
   get: 5.0.0-release-candidate-9.2.1
-  animated_bottom_navigation_bar: ^1.3.3
+  animated_bottom_navigation_bar: ^1.4.0
   json_annotation: ^4.9.0
-  freezed_annotation: ^2.4.1
   get_storage: ^2.1.1
   bot_toast: ^4.1.3
-  easy_refresh: ^3.4.0
-  infinite_scroll_pagination: ^5.0.0
-  dio: ^5.4.3+1
+  easy_refresh: 3.4.0
+  infinite_scroll_pagination: ^5.1.1
+  dio: ^5.9.2
+  pretty_dio_logger: ^1.4.0
   retrofit: ^4.1.0
   flutter_screenutil: ^5.9.3
   # flutter_spinkit: ^5.2.1
-  simple_animations: ^5.0.2
-  event_bus: ^2.0.0
+  simple_animations: ^5.1.0
+  event_bus: ^2.0.1
   photo_view: ^0.15.0
   # wechat_assets_picker: ^9.0.4
   # wechat_camera_picker: ^4.2.2
-  flutter_native_splash: ^2.4.0
-  path_provider: ^2.1.3
+  flutter_native_splash: ^2.4.4
+  path_provider: ^2.1.5
   # cached_network_image: ^3.2.2
-  extended_image: ^8.2.1
+  extended_image: ^9.1.0
   # image_gallery_saver: ^2.0.3
   image_gallery_saver_plus: ^4.0.1
-  permission_handler: ^11.3.1
-  # package_info_plus: ^8.0.0
-  device_info_plus: ^10.1.0
-  url_launcher: ^6.3.0
-  internet_connection_checker_plus: ^2.5.2
+  permission_handler: ^12.0.1
+  # package_info_plus: ^9.0.1
+  device_info_plus: ^10.1.2
+  url_launcher: ^6.3.1
+  internet_connection_checker_plus: ^3.0.0
   lifecycle: ^0.10.0
-  pretty_dio_logger: ^1.4.0
 
 
 dev_dependencies:
@@ -82,14 +81,13 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
 
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
   build_runner: ^2.4.12
-  flutter_gen_runner: ^5.7.0
+  flutter_gen_runner: ^5.10.0
   json_serializable: ^6.8.0
-  freezed: ^2.5.7
   retrofit_generator: ^9.1.2
   # 一键生成启动图标: dart pub run flutter_launcher_icons
-  flutter_launcher_icons: ^0.14.0
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

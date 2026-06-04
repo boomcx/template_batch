@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tabs_template/pages/goods_detail/goods_detail.dart';
-import 'package:tabs_template/pages/home/home.dart';
-import 'package:tabs_template/utils/device_utils.dart';
-import '/app.dart';
 
-import 'controller.dart';
+import 'package:tabs_template/app.dart';
+
+import 'package:tabs_template/pages/home/controller.dart';
+import 'package:tabs_template/pages/goods_detail/goods_detail.dart';
 
 class HomeView extends BaseView<HomeController> {
   const HomeView({super.key});
@@ -37,7 +36,9 @@ class HomeView extends BaseView<HomeController> {
               try {
                 await NetRepository.client.videoList(1, 10);
                 // showMessage('请求成功');
-              } catch (e) {}
+              } catch (e) {
+                showMessage('请求异常');
+              }
             },
             child: const Text('successful request'),
           ),

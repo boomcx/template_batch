@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'app.dart';
+import 'package:tabs_template/app.dart';
 
-import './pages/message/message.dart';
-import '/pages/home/home.dart';
-import '/pages/mine/mine.dart';
+import 'package:tabs_template/pages/message/message.dart';
+import 'package:tabs_template/pages/home/home.dart';
+import 'package:tabs_template/pages/mine/mine.dart';
 
 enum TabbarType {
   home,

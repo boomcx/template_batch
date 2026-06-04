@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 /// 使用时 必须保证属性和 `JsonConverter<String, dynamic>` 中的 `String` 一直
 

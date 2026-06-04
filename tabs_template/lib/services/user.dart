@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import '../models.dart';
-import '../network/repository.dart';
+import 'package:tabs_template/models.dart';
+import 'package:tabs_template/network/repository.dart';
 
 const _kAppToken = 'k_app_token';
 const _kUser = 'k_user';

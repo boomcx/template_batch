@@ -1,21 +1,40 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-import '../extensions/json_extension.dart';
+import 'package:tabs_template/extensions/json_extension.dart';
 
-part 'video_list.freezed.dart';
 part 'video_list.g.dart';
 
-@freezed
-class VideoList with _$VideoList {
-  const factory VideoList({
-    @JsonAlwaysString() @Default('0') String id,
-    @Default('') String title,
-    @Default('') String userName,
-    @Default('') String userPic,
-    @Default('') String coverUrl,
-    @Default('') String playUrl,
-    @JsonAlwaysString() @Default('00:00') String duration,
-  }) = _VideoList;
-  factory VideoList.fromJson(Map<String, Object?> json) =>
+/// 视频列表项。
+@JsonSerializable()
+class VideoList {
+  const VideoList({
+    this.id = '0',
+    this.title = '',       
+    this.userName = '',
+    this.userPic = '',
+    this.coverUrl = '',
+    this.playUrl = '',
+    this.duration = '00:00',
+  });
+
+  @JsonKey(fromJson: _stringFromJson, toJson: _stringToJson)
+  final String id;
+  final String title;
+  final String userName;
+  final String userPic;
+  final String coverUrl;
+  final String playUrl;
+
+  @JsonKey(fromJson: _stringFromJson, toJson: _stringToJson)
+  final String duration;
+
+  factory VideoList.fromJson(Map<String, dynamic> json) =>
       _$VideoListFromJson(json);
+
+  Map<String, dynamic> toJson() => _$VideoListToJson(this);
 }
+
+String _stringFromJson(Object? json) =>
+    const JsonAlwaysString().fromJson(json);
+
+Object? _stringToJson(String object) => const JsonAlwaysString().toJson(object);

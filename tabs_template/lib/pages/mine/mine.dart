@@ -1,11 +1,9 @@
-library mine;
-
 import 'package:get/get.dart';
 
-import './controller.dart';
+import 'package:tabs_template/pages/mine/controller.dart';
 
-export './controller.dart';
-export './view.dart';
+export 'package:tabs_template/pages/mine/controller.dart';
+export 'package:tabs_template/pages/mine/view.dart';
 
 /// 独立到每个页面，用脚本生成对应的路由名称
 /// 路由名称

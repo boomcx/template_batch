@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../widgets/common/toast.dart';
-import '../widgets/dialogs/common_alert.dart';
-import '../support_files/theme.dart';
+import 'package:tabs_template/widgets/common/toast.dart';
+import 'package:tabs_template/widgets/dialogs/common_alert.dart';
+import 'package:tabs_template/support_files/theme.dart';
 
 class LaunchUtil {
   /// 拨打电话

@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:get/get.dart';
 
-import '../../support_files/theme.dart';
-import '/support_files/text_style.dart';
-import '/utils/image_save.dart';
-import '/widgets/common/gaps.dart';
-import '/widgets/common/toast.dart';
-import '/widgets/dialogs/common_alert.dart';
-import 'hero.dart';
+import 'package:tabs_template/support_files/theme.dart';
+import 'package:tabs_template/support_files/text_style.dart';
+import 'package:tabs_template/utils/image_save.dart';
+import 'package:tabs_template/widgets/common/gaps.dart';
+import 'package:tabs_template/widgets/common/toast.dart';
+import 'package:tabs_template/widgets/dialogs/common_alert.dart';
+import 'package:tabs_template/widgets/slide_preview/hero.dart';
 
 class PreviewImages {
   static show(

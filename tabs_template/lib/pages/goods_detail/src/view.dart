@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tabs_template/app.dart';
-import 'package:tabs_template/tabbar.dart';
 
-import '../goods_detail.dart';
+import 'package:tabs_template/app.dart';
+import 'package:tabs_template/pages/goods_detail/goods_detail.dart';
 
 class GoodsDetailView extends BaseRecreateView<GoodsDetailController> {
   const GoodsDetailView({super.key});
@@ -44,7 +43,7 @@ class GoodsDetailView extends BaseRecreateView<GoodsDetailController> {
                 // }
                 controller.refresh();
               },
-              child: Text("refresh"),
+              child: const Text('refresh'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -57,7 +56,7 @@ class GoodsDetailView extends BaseRecreateView<GoodsDetailController> {
                 // TabbarController.to.switchTo(TabbarType.mine);
                 // }
               },
-              child: Text("next"),
+              child: const Text('next'),
             ),
           ],
         ),

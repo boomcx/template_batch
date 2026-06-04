@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import './req_interceptor.dart';
-import './resp_interceptor.dart';
+import 'package:tabs_template/network/req_interceptor.dart';
+import 'package:tabs_template/network/resp_interceptor.dart';
 
-import '../widgets/common/toast.dart';
-import 'api_client.dart';
+import 'package:tabs_template/widgets/common/toast.dart';
+import 'package:tabs_template/network/api_client.dart';
 
-/// 统一处理错误信息
+/// 统一请求入口与错误展示。
 void formatError(e) {
   // logger.d(e.toString());
   if (e is Response) {

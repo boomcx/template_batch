@@ -1,16 +1,23 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-part 'paging_index.freezed.dart';
 part 'paging_index.g.dart';
 
-@Freezed(genericArgumentFactories: true)
-class PagingIndex<T> with _$PagingIndex {
-  const factory PagingIndex({
-    @Default(0) int total,
-    @Default([]) List<T> list,
-  }) = _PagingIndex;
+/// 泛型分页响应。
+@JsonSerializable(genericArgumentFactories: true)
+class PagingIndex<T> {
+  const PagingIndex({
+    this.total = 0,
+    this.list = const [],
+  });
+  final int total;
+  final List<T> list;
 
   factory PagingIndex.fromJson(
-          Map<String, Object?> json, T Function(dynamic json) fromJsonT) =>
+    Map<String, dynamic> json,
+    T Function(Object? json) fromJsonT,
+  ) =>
       _$PagingIndexFromJson(json, fromJsonT);
+
+  Map<String, dynamic> toJson(Object? Function(T value) toJsonT) =>
+      _$PagingIndexToJson(this, toJsonT);
 }

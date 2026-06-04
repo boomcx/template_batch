@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../app.dart';
-import 'controller.dart';
+import 'package:tabs_template/app.dart';
+import 'package:tabs_template/pages/message/controller.dart';
 
 class MessageView extends BaseView<MessageController> {
   const MessageView({super.key});
@@ -16,7 +16,7 @@ class MessageView extends BaseView<MessageController> {
   @override
   Widget buildBody(BuildContext context) {
     return SpeedyPagedList.separated(
-      controller: controller as MessageController,
+      controller: controller,
       itemBuilder: (context, index, item) {
         return Container(
             color: Color.fromARGB(255, Random().nextInt(255),

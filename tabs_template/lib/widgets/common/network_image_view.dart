@@ -1,7 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../slide_preview/pics_swiper.dart';
+import 'package:tabs_template/widgets/slide_preview/pics_swiper.dart';
 
 class NetworkAssets extends StatelessWidget {
   const NetworkAssets(

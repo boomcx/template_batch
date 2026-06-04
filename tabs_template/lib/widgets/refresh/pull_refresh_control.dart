@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:easy_refresh/easy_refresh.dart';
 
-import 'paging_mixin.dart';
+import 'package:tabs_template/widgets/refresh/paging_mixin.dart';
 
 /// 刷新配置
 class PageRefreshControl extends StatelessWidget {
@@ -28,16 +28,8 @@ class PageRefreshControl extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EasyRefresh.builder(
-      key: UniqueKey(),
       controller: pagingMixin.refreshController,
       header: header,
-      // ??
-      // RefreshHeader(
-      //   clamping: locatorMode,
-      //   position: locatorMode
-      //       ? IndicatorPosition.locator
-      //       : IndicatorPosition.above,
-      // ),
       onRefresh: pagingMixin.onRefresh,
       childBuilder: childBuilder,
     );

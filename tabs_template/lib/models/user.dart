@@ -1,13 +1,18 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-part 'user.freezed.dart';
 part 'user.g.dart';
 
-@freezed
-class User with _$User {
-  const factory User({
-    @Default('') String name,
-    @Default('') String uid,
-  }) = _User;
-  factory User.fromJson(Map<String, Object?> json) => _$UserFromJson(json);
+/// 用户信息。
+@JsonSerializable()
+class User {
+  const User({
+    this.name = '',
+    this.uid = '',
+  });
+  final String name;
+  final String uid;
+
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import 'paging_mixin.dart';
-import 'pull_refresh_control.dart';
-import 'refresh_footer.dart';
+import 'package:tabs_template/widgets/refresh/paging_mixin.dart';
+import 'package:tabs_template/widgets/refresh/pull_refresh_control.dart';
+import 'package:tabs_template/widgets/refresh/refresh_footer.dart';
 
 /// 快速构建 `ListView` 形式的分页列表
 /// 其他详细参数查看 [ListView]
@@ -109,6 +109,7 @@ class SpeedyPagedList<T> extends StatelessWidget {
       void Function() fetchNextPage, ScrollPhysics physics) {
     if (_itemHeaderBuilder != null || _itemFooterBuilder != null) {
       return PagedListView<int, T>.separated(
+        scrollController: scrollController,
         physics: physics,
         padding: padding,
         state: state,
@@ -129,12 +130,15 @@ class SpeedyPagedList<T> extends StatelessWidget {
           emptyView: emptyView,
           animateTransitions: animateTransitions,
         ),
-        separatorBuilder: _separatorBuilder!,
+        // 分组模式不强制传分割线，默认不占位。
+        separatorBuilder:
+            _separatorBuilder ?? (_, __) => const SizedBox.shrink(),
       );
     }
 
     return _separatorBuilder != null
         ? PagedListView<int, T>.separated(
+            scrollController: scrollController,
             physics: physics,
             padding: padding,
             state: state,
@@ -150,6 +154,7 @@ class SpeedyPagedList<T> extends StatelessWidget {
             separatorBuilder: _separatorBuilder,
           )
         : PagedListView<int, T>(
+            scrollController: scrollController,
             physics: physics,
             padding: padding,
             state: state,

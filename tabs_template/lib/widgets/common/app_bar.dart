@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 
-import 'app_bar_back_button.dart';
+import 'package:tabs_template/widgets/common/app_bar_back_button.dart';
 
 class AAppBar extends StatefulWidget implements PreferredSizeWidget {
   const AAppBar({

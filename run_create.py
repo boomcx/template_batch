@@ -2,9 +2,11 @@
 
 import os
 import shutil
+import subprocess
+from pathlib import Path
 
 print(
-    """
+    r"""
 
 Flutter 项目创建脚本！
  _                           _         _                         _         
@@ -21,8 +23,8 @@ Flutter 项目创建脚本！
 )
 
 
-# 用户输入项目名称
 def get_project_name(prompt):
+    """读取非空项目名称。"""
     while True:
         project_name = input(prompt)
         if project_name.strip() != "":
@@ -32,16 +34,16 @@ def get_project_name(prompt):
     return project_name
 
 
-# 用户输入项目组织名称
 def get_project_org(prompt):
+    """读取项目组织名，未输入时使用默认 Bundle ID 前缀。"""
     project_org = input(prompt)
     if project_org.strip() == "":
         project_org = "com.example"
     return project_org
 
 
-# 选择项目类型
 def get_project_type(prompt):
+    """读取模板类型编号。"""
     while True:
         project_type = input(prompt)
         if project_type.isdigit():
@@ -51,8 +53,8 @@ def get_project_type(prompt):
     return project_type
 
 
-# 复制文件
 def copy_folder(source_folder, destination_folder):
+    """递归复制模板目录到目标项目。"""
     if not os.path.exists(destination_folder):
         os.makedirs(destination_folder)
 
@@ -66,15 +68,8 @@ def copy_folder(source_folder, destination_folder):
             shutil.copy2(source, destination)
 
 
-# 文件修改
-def modfy_file(file, old_str, new_str):
-    """
-    替换文件中的字符串
-    :param file:文件名
-    :param old_str:就字符串
-    :param new_str:新字符串
-    :return:
-    """
+def replace_in_file(file, old_str, new_str):
+    """替换命中行，用于注入 pubspec 配置。"""
     file_data = ""
     with open(file, "r", encoding="utf-8") as f:
         for line in f:
@@ -85,6 +80,73 @@ def modfy_file(file, old_str, new_str):
             file_data += line
     with open(file, "w", encoding="utf-8") as f:
         f.write(file_data)
+
+
+def read_package_name(pubspec_file):
+    """从 pubspec.yaml 读取 Dart 包名。"""
+    with open(pubspec_file, "r", encoding="utf-8") as f:
+        for line in f:
+            if line.startswith("name:"):
+                return line.split(":", 1)[1].strip()
+    raise ValueError(f"未找到包名: {pubspec_file}")
+
+
+def rewrite_package_imports(project_dir, source_package, target_package):
+    """把模板包名导入替换为目标项目包名。"""
+    replace_from = f"package:{source_package}/"
+    replace_to = f"package:{target_package}/"
+    for root in ("lib", "test"):
+        root_dir = Path(project_dir) / root
+        if not root_dir.exists():
+            continue
+        for dart_file in root_dir.rglob("*.dart"):
+            text = dart_file.read_text(encoding="utf-8")
+            new_text = text.replace(replace_from, replace_to)
+            if new_text != text:
+                dart_file.write_text(new_text, encoding="utf-8")
+
+
+def find_jdk17_home():
+    """查找本机 JDK 17，供 Android Gradle 构建使用。"""
+    if os.name != "posix":
+        return None
+    java_home = Path("/usr/libexec/java_home")
+    if not java_home.exists():
+        return None
+    try:
+        result = subprocess.run(
+            [str(java_home), "-v", "17"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except subprocess.CalledProcessError:
+        return None
+    return result.stdout.strip()
+
+
+def configure_android_gradle_jdk(project_dir):
+    """为目标项目写入 Gradle JDK 17 配置。"""
+    jdk_home = find_jdk17_home()
+    if not jdk_home:
+        print("*** 未检测到 JDK 17，Android 构建请手动配置 Gradle JDK 为 17")
+        return
+
+    gradle_properties = Path(project_dir) / "android" / "gradle.properties"
+    if not gradle_properties.exists():
+        return
+
+    lines = gradle_properties.read_text(encoding="utf-8").splitlines()
+    property_line = f"org.gradle.java.home={jdk_home}"
+    updated = False
+    for index, line in enumerate(lines):
+        if line.startswith("org.gradle.java.home="):
+            lines[index] = property_line
+            updated = True
+            break
+    if not updated:
+        lines.insert(1, property_line)
+    gradle_properties.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 # def remove_line(file_name, line_to_skip):
@@ -101,7 +163,7 @@ def modfy_file(file, old_str, new_str):
 
 # 当前脚本文件路径
 # /Users/xxx/Desktop/template_batch
-scriptPath = os.path.dirname(__file__)
+scriptPath = Path(__file__).resolve().parent
 
 # 创建项目配置
 project_name = get_project_name("请输入项目名称：")
@@ -111,7 +173,7 @@ project_org = get_project_org("请输入项目BundleID（默认：com.example）
 project_path = input(f"请输入项目目录（默认：{scriptPath}）：")
 
 if project_path == "":
-    project_path = scriptPath
+    project_path = str(scriptPath)
 if not os.path.exists(project_path):
     os.makedirs(project_path)
 
@@ -132,7 +194,10 @@ os.chdir(project_path)
 # print("*** 组织：", project_org)
 
 print("*** 正在创建项目...")
-os.system(f"flutter create --platforms ios,android {project_name} --org {project_org}")
+subprocess.run(
+    ["flutter", "create", "--platforms", "ios,android", project_name, "--org", project_org],
+    check=True,
+)
 
 print("*** 复制模版文件...")
 # assets
@@ -145,12 +210,14 @@ source_lib = f"{scriptPath}/{'simple_template' if project_type == '1'  else  'ta
 print(source_lib)
 copy_folder(source_lib, f"{project_path}/{project_name}/lib")
 
+configure_android_gradle_jdk(Path(project_path) / project_name)
+
 
 print("*** 修改插件文件...")
 pubspec = f"{project_path}/{project_name}/pubspec.yaml"
 
 # dependencies
-modfy_file(
+replace_in_file(
     pubspec,
     "cupertino_icons:",
     """ 
@@ -160,57 +227,55 @@ modfy_file(
     sdk: flutter
 
   # get: ^5.0.0-release-candidate-6
-  get: ^5.0.0-release-candidate-9.3.2
-  animated_bottom_navigation_bar: ^1.3.3
+  get: 5.0.0-release-candidate-9.2.1
+  animated_bottom_navigation_bar: ^1.4.0
   json_annotation: ^4.9.0
-  freezed_annotation: ^2.4.1
   get_storage: ^2.1.1
   bot_toast: ^4.1.3
-  easy_refresh: ^3.4.0
-  infinite_scroll_pagination: ^5.0.0
-  dio: ^5.4.3+1
+  easy_refresh: 3.4.0
+  infinite_scroll_pagination: ^5.1.1
+  dio: ^5.9.2
   retrofit: ^4.1.0
   flutter_screenutil: ^5.9.3
   flutter_spinkit: ^5.2.1
-  simple_animations: ^5.0.2
-  event_bus: ^2.0.0
+  simple_animations: ^5.1.0
+  event_bus: ^2.0.1
   photo_view: ^0.15.0
   # wechat_assets_picker: ^9.0.4
   # wechat_camera_picker: ^4.2.2
-  flutter_native_splash: ^2.4.0
-  path_provider: ^2.1.3
+  flutter_native_splash: ^2.4.4
+  path_provider: ^2.1.5
   # cached_network_image: ^3.2.2
-  extended_image: ^8.2.1
+  extended_image: ^9.1.0
   image_gallery_saver_plus: ^4.0.1
-  permission_handler: ^11.3.1
-  package_info_plus: ^8.0.0
-  device_info_plus: ^10.1.0
-  url_launcher: ^6.3.0
-  internet_connection_checker_plus: ^2.5.2
+  permission_handler: ^12.0.1
+  package_info_plus: ^9.0.1
+  device_info_plus: ^10.1.2
+  url_launcher: ^6.3.1
+  internet_connection_checker_plus: ^3.0.0
 
     """,
 )
 
 # dev_dependencies
-modfy_file(
+replace_in_file(
     pubspec,
     "flutter_lints:",
     """
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
   build_runner: ^2.4.12
-  flutter_gen_runner: ^5.7.0
+  flutter_gen_runner: ^5.10.0
   json_serializable: ^6.8.0
-  freezed: ^2.5.7
   retrofit_generator: ^9.1.2
   # 一键生成启动图标: dart pub run flutter_launcher_icons
-  flutter_launcher_icons: ^0.14.0
+  flutter_launcher_icons: ^0.14.4
   pretty_dio_logger: ^1.4.0
 
     """,
 )
 
 # 资源引用路径
-modfy_file(
+replace_in_file(
     pubspec,
     "uses-material-design: true",
     """
@@ -249,6 +314,14 @@ analyzer:
     )
 
 
+template_package_name = read_package_name(scriptPath / "tabs_template" / "pubspec.yaml")
+target_package_name = read_package_name(Path(project_path) / project_name / "pubspec.yaml")
+rewrite_package_imports(
+    Path(project_path) / project_name,
+    template_package_name,
+    target_package_name,
+)
+
 print("*** 执行 dart run build_runner build ...")
 os.chdir(os.path.join(project_path, project_name))
-os.system(f"dart run build_runner build")
+subprocess.run(["dart", "run", "build_runner", "build"], check=True)

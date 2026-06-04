@@ -29,7 +29,7 @@ class $AssetsImagesGen {
 }
 
 class Assets {
-  Assets._();
+  const Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
 }
@@ -64,10 +64,10 @@ class AssetGenImage {
     ImageRepeat repeat = ImageRepeat.noRepeat,
     Rect? centerSlice,
     bool matchTextDirection = false,
-    bool gaplessPlayback = false,
+    bool gaplessPlayback = true,
     bool isAntiAlias = false,
     String? package,
-    FilterQuality filterQuality = FilterQuality.low,
+    FilterQuality filterQuality = FilterQuality.medium,
     int? cacheWidth,
     int? cacheHeight,
   }) {

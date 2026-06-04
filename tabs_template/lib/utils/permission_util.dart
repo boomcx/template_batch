@@ -9,9 +9,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '/support_files/text_style.dart';
-import '/widgets/dialogs/common_alert.dart';
-import '/service.dart';
+import 'package:tabs_template/support_files/text_style.dart';
+import 'package:tabs_template/widgets/dialogs/common_alert.dart';
+import 'package:tabs_template/service.dart';
 
 class PermissionUtil {
   static PermissionUtil? _instance;

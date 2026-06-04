@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '/pages/mine/theme_change/theme_change.dart';
+import 'package:tabs_template/pages/mine/theme_change/theme_change.dart';
 
-import '../../app.dart';
-import 'controller.dart';
+import 'package:tabs_template/app.dart';
+import 'package:tabs_template/pages/mine/controller.dart';
 
 class MineView extends BaseView<MineController> {
   const MineView({super.key});
@@ -19,7 +19,7 @@ class MineView extends BaseView<MineController> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("MineView ${controller}").paddingOnly(bottom: 20),
+          Text('MineView $controller').paddingOnly(bottom: 20),
           ElevatedButton(
             onPressed: () {
               Get.toNamed(kRouteThemeChange);

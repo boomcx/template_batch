@@ -6,18 +6,18 @@ part of 'paging_index.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PagingIndexImpl<T> _$$PagingIndexImplFromJson<T>(
+PagingIndex<T> _$PagingIndexFromJson<T>(
   Map<String, dynamic> json,
   T Function(Object? json) fromJsonT,
 ) =>
-    _$PagingIndexImpl<T>(
+    PagingIndex<T>(
       total: (json['total'] as num?)?.toInt() ?? 0,
       list:
           (json['list'] as List<dynamic>?)?.map(fromJsonT).toList() ?? const [],
     );
 
-Map<String, dynamic> _$$PagingIndexImplToJson<T>(
-  _$PagingIndexImpl<T> instance,
+Map<String, dynamic> _$PagingIndexToJson<T>(
+  PagingIndex<T> instance,
   Object? Function(T value) toJsonT,
 ) =>
     <String, dynamic>{

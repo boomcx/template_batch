@@ -9,9 +9,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:lifecycle/lifecycle.dart';
 
-import 'app.dart';
-import 'routes/app_pages.dart';
-import 'service.dart';
+import 'package:tabs_template/app.dart';
+import 'package:tabs_template/routes/app_pages.dart';
+import 'package:tabs_template/service.dart';
 
 void main() async {
   await _initAsync();

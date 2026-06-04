@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../support_files/theme.dart';
-import '../common/gaps.dart';
-import '/support_files/text_style.dart';
+import 'package:tabs_template/support_files/theme.dart';
+import 'package:tabs_template/widgets/common/gaps.dart';
+import 'package:tabs_template/support_files/text_style.dart';
 
 /// 自定义 Dialog
 ///

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../common/app_progress_indicator.dart';
-import '../common/empty_data_view.dart';
+import 'package:tabs_template/widgets/common/app_progress_indicator.dart';
+import 'package:tabs_template/widgets/common/empty_data_view.dart';
 
 PagedChildBuilderDelegate<ItemType> pagedChildDelegate<ItemType>(
   ItemWidgetBuilder<ItemType> builder, {

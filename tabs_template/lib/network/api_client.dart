@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../models.dart';
-import 'params.dart';
+import 'package:tabs_template/models.dart';
+import 'package:tabs_template/network/params.dart';
 
-export 'params.dart';
+export 'package:tabs_template/network/params.dart';
 
 part 'api_client.g.dart';
 

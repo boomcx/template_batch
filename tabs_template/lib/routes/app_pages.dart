@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import '/pages/goods_detail/goods_detail.dart';
+import 'package:tabs_template/pages/goods_detail/goods_detail.dart';
 
-import '../widgets/common/toast.dart';
-import '/pages/mine/theme_change/theme_change.dart';
-import '/tabbar.dart';
+import 'package:tabs_template/widgets/common/toast.dart';
+import 'package:tabs_template/pages/mine/theme_change/theme_change.dart';
+import 'package:tabs_template/tabbar.dart';
 
 class AppPages {
   AppPages._();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '/support_files/assets.gen.dart';
-import 'app_progress_indicator.dart';
+import 'package:tabs_template/support_files/assets.gen.dart';
+import 'package:tabs_template/widgets/common/app_progress_indicator.dart';
 
 /// 搜索结果为空
 class DefaultSearchEmpty extends StatelessWidget {

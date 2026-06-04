@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:tabs_template/services/app.dart';
 
-import '/support_files/theme.dart';
-import 'app_progress_indicator.dart';
+import 'package:tabs_template/support_files/theme.dart';
+import 'package:tabs_template/services/app.dart';
+import 'package:tabs_template/widgets/common/app_progress_indicator.dart';
 
 String _message = '';
 
-/// easy show toast
+/// 统一业务提示入口。
+///
+/// 适合调用方直接展示轻提示，内部会自动去重并关闭 loading。
 showMessage(String message, {Function()? onDissmiss}) {
   if (_message == message) return;
 
@@ -23,6 +25,7 @@ showMessage(String message, {Function()? onDissmiss}) {
   });
 }
 
+/// 显示 loading。
 showLoading({String? message}) {
   if (AppService.to.isHideLoading) {
     return;
@@ -31,18 +34,22 @@ showLoading({String? message}) {
   Toast.showLoading(message: message);
 }
 
+/// 关闭所有 loading。
 hideLoading() {
   Toast.hideLoading();
 }
 
 class Toast {
+  /// BotToast 路由观察器。
   static NavigatorObserver toastNavigatorObserver() =>
       BotToastNavigatorObserver();
 
+  /// BotToast 初始化包装。
   static Widget init(BuildContext context, Widget child) {
     return BotToastInit().call(context, child);
   }
 
+  /// 错误提示。
   static void showError(String message) {
     BotToast.showCustomText(
       backgroundColor: Colors.transparent,
@@ -87,6 +94,7 @@ class Toast {
     );
   }
 
+  /// 普通文字提示。
   static void message(String message, {VoidCallback? onClose}) {
     Toast.hideLoading();
     BotToast.showCustomText(
@@ -127,6 +135,7 @@ class Toast {
     );
   }
 
+  /// 成功提示。
   static void showSuccess(String message) {
     BotToast.showCustomText(
       backgroundColor: Colors.transparent,
@@ -168,6 +177,7 @@ class Toast {
     );
   }
 
+  /// loading 提示。
   static void showLoading({String? message}) {
     const size = 60.0;
 
@@ -217,6 +227,7 @@ class Toast {
         });
   }
 
+  /// 关闭当前页面的 loading。
   static void hideLoading() {
     BotToast.closeAllLoading();
   }

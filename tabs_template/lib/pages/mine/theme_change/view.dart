@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../support_files/theme.dart';
-import 'theme_change.dart';
+import 'package:tabs_template/support_files/theme.dart';
+import 'package:tabs_template/pages/mine/theme_change/theme_change.dart';
 
 class ThemeChangeView extends GetView<ThemeChangeController> {
   const ThemeChangeView({super.key});

@@ -4,46 +4,51 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+/// 分页接口返回值。
 class PagedListRes<T> {
-  /// 当前页数据
-  List<T>? items;
+  /// 当前页列表。
+  final List<T> items;
 
-  /// 总数
-  int total;
+  /// 数据总数。
+  final int total;
 
+  /// [items] 允许传空，内部统一转为空列表，避免分页插件重复请求第一页。
   PagedListRes(
-    this.items,
+    List<T>? items,
     this.total,
-  );
+  ) : items = items ?? [];
 }
 
-/// 分页控制器
+/// 分页控制器混入。
 ///
-/// `on GetxController` 简化使用过程
+/// 使用方式：
+/// 1. 控制器 `with PagingMixin<T>`
+/// 2. 实现 `fecthData(page)`
+/// 3. 页面绑定 `pagingController`
+/// 4. 刷新时调用 `onRefresh()`
+///
+/// `fecthData` 返回 `null` 时会按空页处理；若服务端 total 不准确，
+/// 空页也会停止继续翻页，避免无效循环请求。
 mixin PagingMixin<T> on GetxController {
-  /// 初始页码
+  /// 初始页码。
   int initPage = 1;
 
-  /// 当前页码请求返回的分页数据
+  /// 最近一次接口返回。
   PagedListRes<T>? requestRes;
 
-  /// 全部的列表数据
+  /// 已加载的全部列表数据。
   List<T> get items => _pagingController.items ?? [];
 
-  /// 页面状态控制
+  /// 列表状态控制器。
   ///
-  /// `infinite_scroll_pagination` 用列表超屏距离和 `state.hasNextPage` 判断是否需要进行下一次请求
-  /// 所以当数据渲染没有超屏且 `hasNextPage` 为true时，
-  /// 插件会尝试多次调用 `fetchPage` 获取数据，以满足插件限制条件
+  /// 插件会根据 `hasNextPage` 自动继续拉取下一页。
   late PagingController<int, T> _pagingController;
   PagingController<int, T> get pagingController => _pagingController;
 
-  /// 预置刷新控制器
+  /// 下拉刷新控制器。
   EasyRefreshController refreshController = EasyRefreshController();
 
-  /// on GetxController 简化使用过程
-  ///
-  /// 也可以指定其他数据包含生命周期函数的类别，eg `State<T extends StatefulWidget> `
+  /// 初始化分页控制器。
   @override
   void onInit() {
     super.onInit();
@@ -54,17 +59,13 @@ mixin PagingMixin<T> on GetxController {
           return initPage;
         }
 
-        // 判断服务器数据是否全部获取
-        if (requestRes!.total > items.length) {
-          final page = (state.keys?.last ?? initPage);
-          return page + 1;
-        }
-        // 返回null，在 `pagingController` 中禁止进行下一次请求
-        return null;
+        return _getNextPageKey(state);
       },
       fetchPage: (pageKey) async {
-        requestRes = await fecthData(pageKey);
-        return Future.value(requestRes?.items ?? []);
+        final result =
+            await fecthData(pageKey) ?? PagedListRes<T>([], items.length);
+        requestRes = result;
+        return result.items;
       },
     );
 
@@ -76,27 +77,55 @@ mixin PagingMixin<T> on GetxController {
   @override
   onClose() {
     _pagingController.dispose();
+    refreshController.dispose();
     super.onClose();
   }
 
-  /// 子类继承实现的请求方法
+  /// 子类实现分页请求。
   FutureOr<PagedListRes<T>?> fecthData(int page);
 
-  /// 请求数据中的状态监听
+  /// 请求状态回调。
   void fecthDataStateChanged(PagingStatus status) {}
 
-  /// 刷新数据
-  Future onRefresh() async {
+  /// 重新拉取第一页数据。
+  Future<void> onRefresh() async {
     requestRes = null;
-    _pagingController.status;
     _pagingController.refresh();
+    return _fetchFirstPage();
   }
 
-  /// 手动外部更新数据列表（整体替换）
+  /// 直接替换当前列表数据。
   void updateItems(List<T> list) {
+    requestRes = PagedListRes<T>(list, list.length);
     _pagingController.value = _pagingController.value.copyWith(
       pages: [list],
       keys: [initPage],
+      hasNextPage: false,
+      error: null,
+      isLoading: false,
     );
+  }
+
+ 
+
+  /// 主动触发第一页请求，并等待分页状态结束，便于下拉刷新正确收尾。
+  Future<void> _fetchFirstPage() {
+    final completer = Completer<void>();
+
+    void completeIfFinished() {
+      final state = _pagingController.value;
+      final hasResult =
+          state.pages != null || state.error != null || !state.hasNextPage;
+      if (!state.isLoading && hasResult && !completer.isCompleted) {
+        _pagingController.removeListener(completeIfFinished);
+        completer.complete();
+      }
+    }
+
+    _pagingController.addListener(completeIfFinished);
+    _pagingController.fetchNextPage();
+    completeIfFinished();
+
+    return completer.future;
   }
 }
