@@ -331,7 +331,7 @@ class ThemeManager {
         backgroundColor: colors.background,
         elevation: 8,
       ),
-      bottomAppBarTheme: BottomAppBarTheme(
+      bottomAppBarTheme: BottomAppBarThemeData(
         surfaceTintColor: colors.comFFF,
         color: colors.comFFF,
         shadowColor: colors.com000,
