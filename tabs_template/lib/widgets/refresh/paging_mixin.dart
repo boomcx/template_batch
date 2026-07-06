@@ -23,11 +23,11 @@ class PagedListRes<T> {
 ///
 /// 使用方式：
 /// 1. 控制器 `with PagingMixin<T>`
-/// 2. 实现 `fecthData(page)`
+/// 2. 实现 `fetchData(page)`
 /// 3. 页面绑定 `pagingController`
 /// 4. 刷新时调用 `onRefresh()`
 ///
-/// `fecthData` 返回 `null` 时会按空页处理；若服务端 total 不准确，
+/// `fetchData` 返回 `null` 时会按空页处理；若服务端 total 不准确，
 /// 空页也会停止继续翻页，避免无效循环请求。
 mixin PagingMixin<T> on GetxController {
   /// 初始页码。
@@ -55,13 +55,27 @@ mixin PagingMixin<T> on GetxController {
 
     _pagingController = PagingController<int, T>(
       getNextPageKey: (state) {
-        print('getNextPageKey - -------- ${state.nextIntPageKey}');
-        return state.lastPageIsEmpty ? null : state.nextIntPageKey;
+        // 如果上一页为空，停止翻页
+        if (state.lastPageIsEmpty) return null;
+
+        // 如果已达到总数，停止翻页
+        final total = requestRes?.total;
+        if (total != null && items.length >= total) return null;
+
+        // 首次请求时 keys 为空，返回 initPage；后续返回上一页 + 1
+        final keys = state.keys;
+        final nextPageKey =
+            (keys != null && keys.isNotEmpty) ? keys.last + 1 : initPage;
+        print('getNextPageKey - -------- $nextPageKey');
+        return nextPageKey;
       },
       fetchPage: (pageKey) async {
-        if (pageKey >= initPage && items.length == requestRes?.total) {
+        // 双重检查：如果已达到总数，直接返回空
+        final total = requestRes?.total;
+        if (total != null && items.length >= total) {
           return [];
         }
+
         print('pageKeypageKeypageKey - $pageKey');
         final result =
             await fetchData(pageKey) ?? PagedListRes<T>([], items.length);
@@ -93,7 +107,6 @@ mixin PagingMixin<T> on GetxController {
   Future<void> onRefresh() async {
     requestRes = null;
     _pagingController.refresh();
-    // return _fetchFirstPage();
   }
 
   /// 直接替换当前列表数据。
@@ -107,25 +120,4 @@ mixin PagingMixin<T> on GetxController {
       isLoading: false,
     );
   }
-
-  /// 主动触发第一页请求，并等待分页状态结束，便于下拉刷新正确收尾。
-  // Future<void> _fetchFirstPage() {
-  //   final completer = Completer<void>();
-
-  //   void completeIfFinished() {
-  //     final state = _pagingController.value;
-  //     final hasResult =
-  //         state.pages != null || state.error != null || !state.hasNextPage;
-  //     if (!state.isLoading && hasResult && !completer.isCompleted) {
-  //       _pagingController.removeListener(completeIfFinished);
-  //       completer.complete();
-  //     }
-  //   }
-
-  //   _pagingController.addListener(completeIfFinished);
-  //   _pagingController.fetchNextPage();
-  //   completeIfFinished();
-
-  //   return completer.future;
-  // }
 }
